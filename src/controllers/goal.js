@@ -1,8 +1,8 @@
-import { find, create as _create } from '../models/goal';
+import Goal from '../models/goal';
 
-var getAll = function () {
+var getAllGoals = function () {
 	return new Promise(function (resolve, reject) {
-		find().then(goals => {
+		Goal.find().then(goals => {
 			resolve(goals);
 		}).catch(error => {
 			reject(error);
@@ -10,9 +10,9 @@ var getAll = function () {
 	});
 };
 
-var create = function (newGoal) {
+var createGoal = function (newGoal) {
 	return new Promise(function (resolve, reject) {
-		_create(newGoal).then(goal => {
+		Goal.create(newGoal).then(goal => {
 			resolve(goal);
 		}).catch(error => {
 			reject(error);
@@ -20,5 +20,7 @@ var create = function (newGoal) {
 	});
 }
 
-export const getAll = getAll;
-export const create = create;
+export {
+	getAllGoals,
+	createGoal
+}

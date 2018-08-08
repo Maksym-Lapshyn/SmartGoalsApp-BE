@@ -1,9 +1,10 @@
 import { Router } from 'express';
+import { getAllGoals, createGoal } from '../controllers/goal'
 
 var router = Router();
 
 router.get('/', function (req, res, next) {
-	getAll()
+	getAllGoals()
 		.then(goals => {
 			res.json(goals)
 		})
@@ -13,7 +14,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-	create(req.body)
+	createGoal(req.body)
 		.then(goal => {
 			res.json(goal)
 		})

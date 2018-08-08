@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
 
-const GoalSchema = new Schema({
+const GoalSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true
@@ -11,4 +11,6 @@ const GoalSchema = new Schema({
 	}
 });
 
-export default model('Goal', GoalSchema);
+const Goal = mongoose.model('Goal', GoalSchema);
+
+export default Goal;

@@ -4,7 +4,7 @@ import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { connectToDatabase } from './database';
-import goalsRoute from './routes/goal-route';
+import goalsRoute from './routes/goal';
 
 // establish connection with the database
 connectToDatabase();
