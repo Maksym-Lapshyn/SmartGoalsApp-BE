@@ -5,11 +5,14 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { connectToDatabase } from './database';
 import goalsRoute from './routes/goal';
+import swaggerUi from 'swagger-ui-express';
+import yaml from 'yamljs';
 
 // establish connection with the database
 connectToDatabase();
 
-var app = express();
+const app = express();
+const swaggerDocument = yaml.load(join(__dirname, 'swagger.yaml'));
 
 app.use(logger('dev'));
 app.use(json());
@@ -18,6 +21,9 @@ app.use(urlencoded({
 }));
 app.use(cookieParser());
 app.use(staticFiles(join(__dirname, 'public')));
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//app.use('/api/v1', router);
 
 app.use('/goals', goalsRoute);
 
