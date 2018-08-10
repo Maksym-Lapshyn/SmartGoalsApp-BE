@@ -1,10 +1,10 @@
 import Goal from '../models/goal';
-import { logger } from '../logger';
+import { logInfo } from '../logger';
 
 const createGoal = function (req, res, next) {
 	const goal = req.body;
 
-	logger.info({
+	logInfo({
 		action: 'create goal',
 		object: goal,
 		timeStamp: new Date()
@@ -19,7 +19,7 @@ const createGoal = function (req, res, next) {
 }
 
 const getAllGoals = function (req, res, next) {
-	logger.info({
+	logInfo({
 		action: 'get all goals',
 		timeStamp: new Date()
 	});
@@ -35,7 +35,7 @@ const getAllGoals = function (req, res, next) {
 const getSingleGoal = function (req, res, next) {
 	const id = req.params.id;
 
-	logger.info({
+	logInfo({
 		action: 'get single goal',
 		id: id,
 		timeStamp: new Date()
@@ -53,7 +53,7 @@ const updateGoal = function (req, res, next) {
 	const id = req.params.id;
 	const goal = req.body;
 
-	logger.info({
+	logInfo({
 		action: 'update goal',
 		id: id,
 		object: goal,
@@ -71,7 +71,7 @@ const updateGoal = function (req, res, next) {
 const deleteGoal = function (req, res, next) {
 	const id = req.params.id;
 
-	logger.info({
+	logInfo({
 		action: 'delete goal',
 		id: id,
 		timeStamp: new Date()

@@ -1,13 +1,9 @@
 import winston from 'winston';
 
-const logger = winston.createLogger({
+const debugLogger = winston.createLogger({
 	level: 'debug',
 	format: winston.format.json(),
 	transports: [
-		//
-		// - Write to all logs with level `info` and below to `combined.log` 
-		// - Write all logs error (and below) to `error.log`.
-		//
 		new winston.transports.File({
 			filename: 'logs/debug.log',
 			level: 'debug'
@@ -23,6 +19,34 @@ const logger = winston.createLogger({
 	]
 });
 
+const errorLogger = winston.createLogger({
+	level: 'error',
+	format: winston.format.json(),
+	transports: [
+		new winston.transports.File({
+			filename: 'logs/error.log',
+			level: 'error'
+		})
+	]
+});
+
+const infoLogger = winston.createLogger({
+	level: 'info',
+	format: winston.format.json(),
+	transports: [
+		new winston.transports.File({
+			filename: 'logs/info.log',
+			level: 'info'
+		})
+	]
+});
+
+const logDebug = debugLogger.debug;
+const logError = errorLogger.error;
+const logInfo = infoLogger.info;
+
 export {
-	logger
+	logDebug,
+	logError,
+	logInfo
 }

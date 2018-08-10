@@ -7,7 +7,7 @@ import { connectToDatabase } from './database';
 import goalsRoute from './routes/goal';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'yamljs';
-import { logger as customLogger } from './logger';
+import { logError } from './logger';
 
 // establish connection with the database
 connectToDatabase();
@@ -36,7 +36,7 @@ app.use(function (err, req, res, next) {
 	const status = err.status || 500;
 	const message = err.message;
 
-	customLogger.error({
+	logError({
 		message: message,
 		status: status,
 		timeStamp: new Date()
