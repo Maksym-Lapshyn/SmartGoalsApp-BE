@@ -7,25 +7,24 @@ import { connectToDatabase } from './database';
 import goalsRoute from './routes/goal';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'yamljs';
+import { logger as customLogger } from './logger';
 
 // establish connection with the database
 connectToDatabase();
 
 const app = express();
-const swaggerDocument = yaml.load(join(__dirname, 'swagger.yaml'));
 
 app.use(logger('dev'));
 app.use(json());
-app.use(urlencoded({
-	extended: false
-}));
+app.use(urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(staticFiles(join(__dirname, 'public')));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+const swaggerDocument = yaml.load(join(__dirname, 'swagger.yaml'));
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //app.use('/api/v1', router);
 
-app.use('/goals', goalsRoute);
+app.use('/api/goals', goalsRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -34,18 +33,19 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-	res.status(err.status || 500);
+	const status = err.status || 500;
+	const message = err.message;
 
-	if (req.app.get('env') === 'development') {
-		res.json({
-			message: err.message,
-			error: err
-		});
-	} else {
-		res.json({
-			message: err.message
-		});
-	}
+	customLogger.error({
+		message: message,
+		status: status,
+		timeStamp: new Date()
+	});
+
+	res.statusMessage = message;
+
+	res.status(status);
+	res.end();
 });
 
-export default app;
+export default app

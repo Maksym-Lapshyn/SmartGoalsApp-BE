@@ -1,26 +1,12 @@
 import { Router } from 'express';
-import { getAllGoals, createGoal } from '../controllers/goal'
+import { createGoal, getAllGoals, getSingleGoal, updateGoal, deleteGoal } from '../controllers/goal'
 
-var router = Router();
+const router = Router();
 
-router.get('/', function (req, res, next) {
-	getAllGoals()
-		.then(goals => {
-			res.json(goals)
-		})
-		.catch(error => {
-			return next(error)
-		});
-});
+router.post('/', createGoal);
+router.get('/', getAllGoals);
+router.get('/:id', getSingleGoal);
+router.put('/:id', updateGoal);
+router.delete('/:id', deleteGoal);
 
-router.post('/', function (req, res, next) {
-	createGoal(req.body)
-		.then(goal => {
-			res.json(goal)
-		})
-		.catch(error => {
-			return next(error)
-		});
-});
-
-export default router;
+export default router
