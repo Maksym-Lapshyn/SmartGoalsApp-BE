@@ -19,6 +19,8 @@ const create = function (req, res, next) {
 }
 
 const getAll = function (req, res, next) {
+	throw new Error('test');
+
 	logInfo({
 		action: 'get all goals',
 		timeStamp: new Date()

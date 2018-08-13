@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
 	const status = err.status || 500;
 	const message = err.message;
-	const strackTrace = err.stackTrace;
+	const strackTrace = err.stack;
 
 	logError({
 		message: message,
