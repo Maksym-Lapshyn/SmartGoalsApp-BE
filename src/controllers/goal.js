@@ -1,7 +1,7 @@
-import Goal from '../models/goal';
 import { logInfo } from '../logger';
+import { goalService } from '../services/goal';
 
-const createGoal = function (req, res, next) {
+const create = function (req, res, next) {
 	const goal = req.body;
 
 	logInfo({
@@ -10,7 +10,7 @@ const createGoal = function (req, res, next) {
 		timeStamp: new Date()
 	});
 	
-	Goal.create(goal).then(newGoal => {
+	goalService.create(goal).then(newGoal => {
 		res.status(201);
 		res.json(newGoal);
 	}).catch(err => {
@@ -18,13 +18,13 @@ const createGoal = function (req, res, next) {
 	});
 }
 
-const getAllGoals = function (req, res, next) {
+const getAll = function (req, res, next) {
 	logInfo({
 		action: 'get all goals',
 		timeStamp: new Date()
 	});
 
-	Goal.find().then(goals => {
+	goalService.getAll().then(goals => {
 		res.status(200);
 		res.json(goals);
 	}).catch(err => {
@@ -32,7 +32,7 @@ const getAllGoals = function (req, res, next) {
 	});
 };
 
-const getSingleGoal = function (req, res, next) {
+const getSingle = function (req, res, next) {
 	const id = req.params.id;
 
 	logInfo({
@@ -41,7 +41,7 @@ const getSingleGoal = function (req, res, next) {
 		timeStamp: new Date()
 	});
 
-	Goal.findById(id).then(goal => {
+	goalService.getSingle(id).then(goal => {
 		res.status(200);
 		res.json(goal);
 	}).catch(err => {
@@ -49,7 +49,7 @@ const getSingleGoal = function (req, res, next) {
 	});
 }
 
-const updateGoal = function (req, res, next) {
+const update = function (req, res, next) {
 	const id = req.params.id;
 	const goal = req.body;
 
@@ -60,7 +60,7 @@ const updateGoal = function (req, res, next) {
 		timeStamp: new Date()
 	});
 
-	Goal.findByIdAndUpdate(id, goal).then(() => {
+	goalService.update(id, goal).then(() => {
 		res.status(204);
 		res.end();
 	}).catch(err => {
@@ -68,7 +68,7 @@ const updateGoal = function (req, res, next) {
 	});
 }
 
-const deleteGoal = function (req, res, next) {
+const remove = function (req, res, next) {
 	const id = req.params.id;
 
 	logInfo({
@@ -77,9 +77,7 @@ const deleteGoal = function (req, res, next) {
 		timeStamp: new Date()
 	});
 
-	Goal.deleteOne({
-		_id: id
-	}).then(() => {
+	goalService.remove(id).then(() => {
 		res.status(204);
 		res.end();
 	}).catch(err => {
@@ -87,10 +85,14 @@ const deleteGoal = function (req, res, next) {
 	});
 }
 
+const goalController = {
+	create: create,
+	getAll: getAll,
+	getSingle: getSingle,
+	update: update,
+	remove: remove
+};
+
 export {
-	createGoal,
-	getAllGoals,
-	getSingleGoal,
-	updateGoal,
-	deleteGoal
+	goalController
 }

@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-
+import 'babel-polyfill';
 import app from '../app';
 var debug = require('debug')('smartgoalsapp:server');
 import { createServer } from 'http';

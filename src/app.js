@@ -19,7 +19,7 @@ app.use(json());
 app.use(urlencoded({extended: false}));
 app.use(cookieParser());
 
-const swaggerDocument = yaml.load(join(__dirname, 'swagger.yaml'));
+const swaggerDocument = yaml.load('swagger.yaml');
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //app.use('/api/v1', router);
@@ -35,11 +35,13 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
 	const status = err.status || 500;
 	const message = err.message;
+	const strackTrace = err.stackTrace;
 
 	logError({
 		message: message,
 		status: status,
-		timeStamp: new Date()
+		timeStamp: new Date(),
+		stackTrace: strackTrace
 	});
 
 	res.statusMessage = message;
