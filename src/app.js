@@ -19,7 +19,7 @@ app.use(json());
 app.use(urlencoded({extended: false}));
 app.use(cookieParser());
 
-const swaggerDocument = yaml.load('swagger.yaml');
+const swaggerDocument = yaml.load('swagger.yml');
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //app.use('/api/v1', router);

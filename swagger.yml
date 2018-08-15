@@ -19,7 +19,6 @@ tags:
             description: 'Find out more'
             url: 'http://swagger.io'
 schemes:
-    - http
     - https
 paths:
     /goals:
