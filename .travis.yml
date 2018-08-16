@@ -9,3 +9,10 @@ script:
 before_install:
 - openssl aes-256-cbc -K $encrypted_b2a93f9bb546_key -iv $encrypted_b2a93f9bb546_iv
   -in travis-ci.ppk.enc -out travis-ci.ppk -d
+addons:
+  ssh_known_hosts: 142.93.163.48
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_<...>_key -iv $encrypted_<...>_iv -in travis-ci.ppk.enc -out /tmp/travis-ci.ppk -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/travis-ci.ppk
+- ssh-add /tmp/travis-ci.ppk
