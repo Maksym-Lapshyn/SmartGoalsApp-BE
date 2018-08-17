@@ -7,7 +7,7 @@ install:
 script:
 - npm run build
 before_install:
-- openssl aes-256-cbc -K $encrypted_f90833a93ba6_key -iv $encrypted_f90833a93ba6_iv -in travis-ci.enc -out travis-ci -d
+- openssl aes-256-cbc -K $encrypted_f90833a93ba6_key -iv $encrypted_f90833a93ba6_iv -in travis-ci.enc -out /tmp/travis-ci -d
 addons:
   ssh_known_hosts: smartgoalsapp.ml
 before_deploy:
