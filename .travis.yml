@@ -19,5 +19,5 @@ deploy:
   provider: script
   skip_cleanup: true
   script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR travis-ci@smartgoalsapp.ml:/var/www/smartgoalsapp
-  #on:
-    #branch: master
+on:
+  branch: master
