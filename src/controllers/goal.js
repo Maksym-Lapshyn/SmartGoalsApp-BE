@@ -2,16 +2,9 @@ import { logInfo } from '../logger';
 import { goalService } from '../services/goal';
 
 const create = function (req, res, next) {
-	const goal = req.body;
-	const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+	logRequest(req);
 
-	logInfo({
-		message: 'Http request received (POST)',
-		action: 'Create goal',
-		object: goal,
-		timeStamp: new Date(),
-		url: url
-	});
+	const goal = req.body;
 	
 	goalService.create(goal).then(newGoal => {
 		res.status(201);
@@ -22,14 +15,7 @@ const create = function (req, res, next) {
 }
 
 const getAll = function (req, res, next) {
-	const url = req.protocol + '://' + req.get('host') + req.originalUrl;
-
-	logInfo({
-		message: 'Http request received (GET)',
-		action: 'get all goals',
-		timeStamp: new Date(),
-		url: url
-	});
+	logRequest(req);
 
 	goalService.getAll().then(goals => {
 		res.status(200);
@@ -40,16 +26,9 @@ const getAll = function (req, res, next) {
 };
 
 const getSingle = function (req, res, next) {
-	const id = req.params.id;
-	const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+	logRequest(req);
 
-	logInfo({
-		message: 'Http request received (GET)',
-		action: 'Get single goal',
-		id: id,
-		timeStamp: new Date(),
-		url: url
-	});
+	const id = req.params.id;
 
 	goalService.getSingle(id).then(goal => {
 		res.status(200);
@@ -60,18 +39,10 @@ const getSingle = function (req, res, next) {
 }
 
 const update = function (req, res, next) {
+	logRequest(req);
+
 	const id = req.params.id;
 	const goal = req.body;
-	const url = req.protocol + '://' + req.get('host') + req.originalUrl;
-
-	logInfo({
-		message: 'Http request received (UPDATE)',
-		action: 'Update goal',
-		id: id,
-		object: goal,
-		timeStamp: new Date(),
-		url: url
-	});
 
 	goalService.update(id, goal).then(() => {
 		res.status(204);
@@ -82,16 +53,9 @@ const update = function (req, res, next) {
 }
 
 const remove = function (req, res, next) {
-	const id = req.params.id;
-	const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+	logRequest(req);
 
-	logInfo({
-		message: 'Http request received (DELETE)',
-		action: 'Delete goal',
-		id: id,
-		timeStamp: new Date(),
-		url: url
-	});
+	const id = req.params.id;
 
 	goalService.remove(id).then(() => {
 		res.status(204);
@@ -100,6 +64,16 @@ const remove = function (req, res, next) {
 		next(err);
 	});
 }
+
+const logRequest = function(req) {
+	logInfo({
+		httpMethod: req.httpMethod,
+		data: req.body,
+		routeParams: req.params,
+		timeStamp: new Date(),
+		url: `${req.protocol}://${req.get('host')}${req.originalUrl}`
+	});
+};
 
 const goalController = {
 	create: create,
