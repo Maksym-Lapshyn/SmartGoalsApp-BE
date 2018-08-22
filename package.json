@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./dist/bin/www",
+    "start": "set HOST=smartgoalsapp.ml && set PROTOCOL=https && set PORT=3333 && set NODE_ENV=production && node ./dist/bin/www",
     "build": "babel ./src -d ./dist",
-    "serve": "nodemon ./src/bin/www --exec babel-node"
+    "serve": "set HOST=localhost && set PROTOCOL=http && set PORT=3000 && nodemon ./src/bin/www --exec babel-node"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -13,11 +13,11 @@
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "js-yaml": "^3.12.0",
     "mongoose": "^5.2.7",
     "morgan": "~1.9.0",
     "swagger-ui-express": "^3.0.10",
-    "winston": "^3.0.0",
-    "yamljs": "^0.3.0"
+    "winston": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

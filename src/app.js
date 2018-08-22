@@ -6,7 +6,7 @@ import { connectToDatabase } from './database';
 import goalsRoute from './routes/goal';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'yamljs';
-import { logError, logInfo } from './logger';
+import { logError } from './logger';
 import fs from 'fs';
 
 // establish connection with the database
