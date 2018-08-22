@@ -21,10 +21,14 @@ if (!fs.existsSync('logs')) {
 }
 
 app.use(logger('dev'));
-
 app.use(json());
-app.use(urlencoded({extended: false}));
 app.use(cookieParser());
+
+app.use(urlencoded({
+	extended: false
+}));
+
+
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/goals', goalsRoute);
 
@@ -38,14 +42,12 @@ app.use(function (err, req, res, next) {
 	const status = err.status || 500;
 	const message = err.message;
 
-	if (status !== 404) {
-		logError({
-			message: message,
-			status: status,
-			timeStamp: new Date(),
-			stackTrace: err.stack
-		});
-	}
+	logError({
+		message: message,
+		status: status,
+		timeStamp: new Date(),
+		stackTrace: err.stack
+	});
 
 	res.statusMessage = message;
 

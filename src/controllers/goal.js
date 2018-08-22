@@ -67,7 +67,7 @@ const remove = function (req, res, next) {
 
 const logRequest = function(req) {
 	logInfo({
-		httpMethod: req.httpMethod,
+		httpMethod: req.method,
 		data: req.body,
 		routeParams: req.params,
 		timeStamp: new Date(),

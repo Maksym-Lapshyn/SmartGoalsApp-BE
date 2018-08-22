@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-    description: 'This is a sample `Swagger Documentation`'
+    description: 'Here you can find documentation for Smart Goals App API'
     version: 1.0.0
-    title: 'Smart Goals App Documentation'
+    title: 'Smart Goals App API Documentation'
     termsOfService: 'http://swagger.io/terms/'
     contact:
         email: maksym@gmail.com
@@ -19,7 +19,7 @@ tags:
             description: 'Find out more'
             url: 'http://swagger.io'
 schemes:
-    - https
+    - http
 paths:
     /goals:
         post:
@@ -29,7 +29,7 @@ paths:
             operationId: addgoal
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{in: body, name: body, description: 'Goal object that needs to be created', required: true, schema: {$ref: '#/definitions/GoalWrite'}}]
+            parameters: [{in: body, name: body, description: 'Goal object that needs to be created', required: true, schema: {$ref: '#/definitions/Goal'}}]
             responses: {'201': {description: 'Goal created', schema: {$ref: '#/definitions/Goal'}}, '400': {description: 'Invalid input'}}
         get:
             tags: [goal]
@@ -55,7 +55,7 @@ paths:
             operationId: updategoal
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Id of goal that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object that needs to be updated', required: true, schema: {$ref: '#/definitions/GoalWrite'}}]
+            parameters: [{name: id, in: path, description: 'Id of goal that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object that needs to be updated', required: true, schema: {$ref: '#/definitions/Goal'}}]
             responses: {'204': {description: 'Goal updated'}, '400': {description: 'Invalid input'}}
         delete:
             tags: [goal]
@@ -70,13 +70,6 @@ definitions:
         type: object
         properties:
             _id: {type: string, format: string}
-            name: {type: string, format: string}
-            description: {type: string, format: string}
-        xml:
-            name: Goal
-    GoalWrite:
-        type: object
-        properties:
             name: {type: string, format: string}
             description: {type: string, format: string}
         xml:
