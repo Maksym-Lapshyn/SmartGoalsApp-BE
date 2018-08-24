@@ -3,7 +3,7 @@ import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { connectToDatabase } from './database';
-import goalsRoute from './routes/goal';
+import goalsRoute from './routes/goal-route';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'js-yaml';
 import { logError } from './logger';

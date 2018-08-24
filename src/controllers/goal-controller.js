@@ -1,5 +1,5 @@
 import { logInfo } from '../logger';
-import { goalService } from '../services/goal';
+import { goalService } from '../services/goal-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
