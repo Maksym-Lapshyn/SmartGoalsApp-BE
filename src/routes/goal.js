@@ -9,4 +9,4 @@ router.get('/:id', goalController.getSingle);
 router.put('/:id', goalController.update);
 router.delete('/:id', goalController.remove);
 
-export default router
+export default router;

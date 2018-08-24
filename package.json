@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set HOST=smartgoalsapp.ml && set PROTOCOL=https && set PORT=3333 && set NODE_ENV=production && node ./dist/bin/www",
+    "start": "node ./dist/bin/www",
     "build": "babel ./src -d ./dist",
-    "serve": "set HOST=localhost && set PROTOCOL=http && set PORT=3000 && nodemon ./src/bin/www --exec babel-node"
+    "serve": "set PORT=3000&& nodemon ./src/bin/www --exec babel-node"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",

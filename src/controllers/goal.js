@@ -85,4 +85,4 @@ const goalController = {
 
 export {
 	goalController
-}
+};

@@ -1,17 +1,7 @@
 import mongoose from 'mongoose';
+import { goalSchema } from '../schemas/goal';
 
-const GoalSchema = new mongoose.Schema({
-	name: {
-		type: String,
-		required: true
-	},
-	description: {
-		type: String,
-		required: true
-	}
-});
-
-const Goal = mongoose.model('Goal', GoalSchema);
+const goal = mongoose.model('Goal', goalSchema);
 
 const create = function (goal) {
 	return new Promise((resolve, reject) => {
@@ -21,7 +11,7 @@ const create = function (goal) {
 
 		goal._id = undefined;
 
-		Goal.create(goal).then(newGoal => {
+		goal.create(goal).then(newGoal => {
 			resolve(newGoal);
 		}).catch(err => {
 			reject(err);
@@ -31,7 +21,7 @@ const create = function (goal) {
 
 const getAll = function () {
 	return new Promise((resolve, reject) => {
-		Goal.find().then(goals => {
+		goal.find().then(goals => {
 			resolve(goals);
 		}).catch(err => {
 			reject(err);
@@ -45,7 +35,7 @@ const getSingle = function (id) {
 			reject(new Error('Argument \'id\' is invalid.'));
 		}
 
-		Goal.findById(id).then(goal => {
+		goal.findById(id).then(goal => {
 			resolve(goal);
 		}).catch(err => {
 			reject(err);
@@ -63,7 +53,7 @@ const update = function(id, goal) {
 
 		goal._id = undefined;
 
-		Goal.findByIdAndUpdate(id, goal).then(() => {
+		goal.findByIdAndUpdate(id, goal).then(() => {
 			resolve();
 		}).catch(err => {
 			next(err);
@@ -77,7 +67,7 @@ const remove = function(id) {
 			reject(new Error('Argument \'id\' is invalid.'));
 		}
 
-		Goal.deleteOne({
+		goal.deleteOne({
 			_id: id
 		}).then(() => {
 			resolve();
@@ -97,4 +87,4 @@ const goalModel = {
 
 export {
 	goalModel
-}
+};

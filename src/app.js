@@ -5,7 +5,7 @@ import logger from 'morgan';
 import { connectToDatabase } from './database';
 import goalsRoute from './routes/goal';
 import swaggerUi from 'swagger-ui-express';
-import yaml from 'yamljs';
+import yaml from 'js-yaml';
 import { logError } from './logger';
 import fs from 'fs';
 
@@ -13,7 +13,7 @@ import fs from 'fs';
 connectToDatabase();
 
 const app = express();
-const swaggerDocument = yaml.load('swagger.yml');
+const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
 
 // create directory for logs if it does not exist
 if (!fs.existsSync('logs')) {
@@ -29,7 +29,7 @@ app.use(urlencoded({
 }));
 
 
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use('/api/goals', goalsRoute);
 
 // catch 404 and forward to error handler
