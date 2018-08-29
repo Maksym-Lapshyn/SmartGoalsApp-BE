@@ -49,7 +49,9 @@ app.use(function (err, req, res, next) {
 		stackTrace: err.stack
 	});
 
-	res.statusMessage = message;
+	// replace all line breaks with spaces since
+	// line breaks are not allowed in status messages
+	res.statusMessage = message.replace('\n', ' ');
 
 	res.status(status);
 	res.end();

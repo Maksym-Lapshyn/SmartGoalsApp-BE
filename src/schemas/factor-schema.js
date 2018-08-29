@@ -7,8 +7,7 @@ const factorSchema = new mongoose.Schema({
 		required: true
 	},
 	description: {
-		type: String,
-		required: true
+		type: String
 	},
 	value: {
 		type: Number,
@@ -22,9 +21,10 @@ const factorSchema = new mongoose.Schema({
 		min: 0,
 		max: 10
 	},
-	contributors: {
-		type: [contributorSchema]
-	}
+	contributors: [{
+		type: mongoose.SchemaTypes.ObjectId,
+		ref: 'Contributor'
+	}]
 });
 
 export {

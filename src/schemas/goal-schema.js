@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { mileStoneSchema } from './milestone-schema';
 
 const goalSchema = new mongoose.Schema({
 	name: {
@@ -7,8 +6,7 @@ const goalSchema = new mongoose.Schema({
 		required: true
 	},
 	description: {
-		type: String,
-		required: true
+		type: String
 	},
 	startDate: {
 		type: Date,
@@ -18,12 +16,17 @@ const goalSchema = new mongoose.Schema({
 		type: Date,
 		required: true
 	},
-	milestones: {
-		type: [mileStoneSchema]
-	},
+	milestones: [{
+		type: mongoose.SchemaTypes.ObjectId,
+		ref: 'Milestone'
+	}],
 	tags: {
 		type: [String]
 	}
+});
+
+goalSchema.pre('find' | 'findOne', function () {
+	this.populate('milestones');
 });
 
 export {

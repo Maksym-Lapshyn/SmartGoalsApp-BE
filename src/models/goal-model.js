@@ -1,5 +1,9 @@
 import mongoose from 'mongoose';
 import { goalSchema } from '../schemas/goal-schema';
+import { mileStoneSchema } from '../schemas/milestone-schema';
+
+// load all models for child schemas in order to be populated
+mongoose.model('Milestone', mileStoneSchema);
 
 const goal = mongoose.model('Goal', goalSchema);
 
@@ -21,11 +25,12 @@ const create = function (goal) {
 
 const getAll = function () {
 	return new Promise((resolve, reject) => {
-		goal.find().then(goals => {
-			resolve(goals);
-		}).catch(err => {
-			reject(err);
-		});
+		goal.find()
+			.then(goals => {
+				resolve(goals);
+			}).catch(err => {
+				reject(err);
+			});
 	});
 };
 
@@ -35,11 +40,18 @@ const getSingle = function (id) {
 			reject(new Error('Argument \'id\' is invalid.'));
 		}
 
-		goal.findById(id).then(goal => {
-			resolve(goal);
-		}).catch(err => {
-			reject(err);
-		});
+		const searchCriteria = {
+			_id: id
+		};
+
+		goal
+			.findOne(searchCriteria)
+			.then(goal => {
+				resolve(goal);
+			})
+			.catch(err => {
+				reject(err);
+			});
 	});
 };
 

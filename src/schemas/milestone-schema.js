@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { factorSchema } from './factor-schema';
 
 const mileStoneSchema = new mongoose.Schema({
 	name: {
@@ -7,8 +6,7 @@ const mileStoneSchema = new mongoose.Schema({
 		required: true
 	},
 	description: {
-		type: String,
-		required: true
+		type: String
 	},
 	plannedDate: {
 		type: Date,
@@ -23,9 +21,10 @@ const mileStoneSchema = new mongoose.Schema({
 		min: 0,
 		max: 10
 	},
-	factors: {
-		type: [factorSchema]
-	}
+	factors: [{
+		type: mongoose.SchemaTypes.ObjectId,
+		ref: 'Factor'
+	}]
 });
 
 export {
