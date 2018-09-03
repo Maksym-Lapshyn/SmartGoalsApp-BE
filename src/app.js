@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import yaml from 'js-yaml';
 import { logError } from './logger';
 import fs from 'fs';
+import validator from 'express-validator';
 
 // establish connection with the database
 connectToDatabase();
@@ -29,6 +30,7 @@ app.use(urlencoded({
 	extended: false
 }));
 
+app.use(validator());
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use('/api/goals', goalsRoute);
