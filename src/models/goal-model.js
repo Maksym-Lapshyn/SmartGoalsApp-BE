@@ -2,20 +2,20 @@ import mongoose from 'mongoose';
 import { goalSchema } from '../schemas/goal-schema';
 import { mileStoneSchema } from '../schemas/milestone-schema';
 
-// load all models for child schemas in order to be populated
+// load all models for child schemas in order to be populated in parents
 mongoose.model('Milestone', mileStoneSchema);
 
-const goal = mongoose.model('Goal', goalSchema);
+const Goal = mongoose.model('Goal', goalSchema);
 
 const create = function (goal) {
 	return new Promise((resolve, reject) => {
 		if (!goal) {
-			reject(new Error('Argument \'goal\' is invalid.'));
+			reject(new Error(`Argument goal: "${goal}" is invalid.`));
 		}
 
 		goal._id = undefined;
 
-		goal.create(goal).then(newGoal => {
+		Goal.create(goal).then(newGoal => {
 			resolve(newGoal);
 		}).catch(err => {
 			reject(err);
@@ -25,50 +25,46 @@ const create = function (goal) {
 
 const getAll = function () {
 	return new Promise((resolve, reject) => {
-		goal.find()
-			.then(goals => {
-				resolve(goals);
-			}).catch(err => {
-				reject(err);
-			});
+		Goal.find().then(goals => {
+			resolve(goals);
+		}).catch(err => {
+			reject(err);
+		});
 	});
 };
 
 const getSingle = function (id) {
 	return new Promise((resolve, reject) => {
 		if (!id) {
-			reject(new Error('Argument \'id\' is invalid.'));
+			reject(new Error(`Argument id: "${id}" is invalid.`));
 		}
 
 		const searchCriteria = {
 			_id: id
 		};
 
-		goal
-			.findOne(searchCriteria)
-			.then(goal => {
-				resolve(goal);
-			})
-			.catch(err => {
-				reject(err);
-			});
+		Goal.findOne(searchCriteria).then(goal => {
+			resolve(goal);
+		}).catch(err => {
+			reject(err);
+		});
 	});
 };
 
 const update = function(id, goal) {
 	return new Promise((resolve, reject) => {
 		if (!id) {
-			reject(new Error('Argument \'id\' is invalid.'));
+			reject(new Error(`Argument id: "${id}" is invalid.`));
 		} else if (!goal) {
-			reject(new Error('Argument \'goal\' is invalid.'));
+			reject(new Error(`Argument goal: "${goal}" is invalid.`));
 		}
 
 		goal._id = undefined;
 
-		goal.findByIdAndUpdate(id, goal).then(() => {
+		Goal.findByIdAndUpdate(id, goal).then(() => {
 			resolve();
 		}).catch(err => {
-			next(err);
+			reject(err);
 		});
 	});
 };
@@ -76,15 +72,17 @@ const update = function(id, goal) {
 const remove = function(id) {
 	return new Promise((resolve, reject) => {
 		if (!id) {
-			reject(new Error('Argument \'id\' is invalid.'));
+			reject(new Error(`Argument id: "${id}" is invalid.`));
 		}
 
-		goal.deleteOne({
+		const searchCriteria = {
 			_id: id
-		}).then(() => {
+		};
+
+		Goal.deleteOne(searchCriteria).then(() => {
 			resolve();
 		}).catch(err => {
-			next(err);
+			reject(err);
 		});
 	});
 };

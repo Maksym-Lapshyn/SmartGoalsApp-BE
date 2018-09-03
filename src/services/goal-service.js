@@ -35,7 +35,7 @@ const update = function(id, goal) {
 		goalModel.update(id, goal).then(() => {
 			resolve();
 		}).catch(err => {
-			next(err);
+			reject(err);
 		});
 	});
 };
@@ -45,7 +45,7 @@ const remove = function(id) {
 		goalModel.remove(id).then(() => {
 			resolve();
 		}).catch(err => {
-			next(err);
+			reject(err);
 		});
 	});
 };

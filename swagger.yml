@@ -17,7 +17,6 @@ tags:
         externalDocs:
             description: 'Find out more'
             url: 'http://swagger.io'
-
 paths:
     /goals:
         post:
