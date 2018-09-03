@@ -13,8 +13,6 @@ const create = function (goal) {
 			reject(new Error(`Argument goal: "${goal}" is invalid.`));
 		}
 
-		goal._id = undefined;
-
 		Goal.create(goal).then(newGoal => {
 			resolve(newGoal);
 		}).catch(err => {
@@ -58,8 +56,6 @@ const update = function(id, goal) {
 		} else if (!goal) {
 			reject(new Error(`Argument goal: "${goal}" is invalid.`));
 		}
-
-		goal._id = undefined;
 
 		Goal.findByIdAndUpdate(id, goal).then(() => {
 			resolve();

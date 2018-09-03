@@ -16,8 +16,6 @@ const create = function (goalId, milestone) {
 			reject(new Error(`Argument milestone: "${milestone}" is invalid.`));
 		}
 
-		milestone._id = undefined;
-
 		Milestone.create(milestone).then(newMilestone => {
 			goalModel.getSingle(goalId).then(goal => {
 				goal.milestones.push(milestone._id);
@@ -75,8 +73,6 @@ const update = function(id, milestone) {
 		} else if (!milestone) {
 			reject(new Error(`Argument milestone: "${milestone}" is invalid.`));
 		}
-
-		milestone._id = undefined;
 
 		Milestone.findByIdAndUpdate(id, milestone).then(() => {
 			resolve();

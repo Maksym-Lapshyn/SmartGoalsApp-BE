@@ -3,6 +3,15 @@ import { milestoneService } from '../services/milestone-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
+	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
+	validateBody(req);
+
+	var errors = req.validationErrors();
+
+	if (errors) {
+		res.status(400);
+		res.json(errors);
+	}
 
 	const milestone = req.body;
 	const goalId = req.params.goalId;
@@ -17,6 +26,14 @@ const create = function (req, res, next) {
 
 const getAllByParent = function (req, res, next) {
 	logRequest(req);
+	validateParams(req);
+
+	var errors = req.validationErrors();
+
+	if (errors) {
+		res.status(400);
+		res.json(errors);
+	}
 
 	const goalId = req.params.goalId;
 
@@ -30,6 +47,14 @@ const getAllByParent = function (req, res, next) {
 
 const getSingle = function (req, res, next) {
 	logRequest(req);
+	validateParams(req);
+
+	var errors = req.validationErrors();
+
+	if (errors) {
+		res.status(400);
+		res.json(errors);
+	}
 
 	const id = req.params.id;
 
@@ -43,6 +68,15 @@ const getSingle = function (req, res, next) {
 
 const update = function (req, res, next) {
 	logRequest(req);
+	validateParams(req);
+	validateBody(req);
+
+	var errors = req.validationErrors();
+
+	if (errors) {
+		res.status(400);
+		res.json(errors);
+	}
 
 	const id = req.params.id;
 	const milestone = req.body;
@@ -57,6 +91,14 @@ const update = function (req, res, next) {
 
 const remove = function (req, res, next) {
 	logRequest(req);
+	validateParams(req);
+
+	var errors = req.validationErrors();
+
+	if (errors) {
+		res.status(400);
+		res.json(errors);
+	}
 
 	const id = req.params.id;
 	const goalId = req.params.goalId;
@@ -68,6 +110,19 @@ const remove = function (req, res, next) {
 		next(err);
 	});
 }
+
+const validateParams = function(req) {
+	req.checkParams('id', 'Milestone id should be a valid identifier.').isMongoId();
+	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
+}
+
+const validateBody = function(req) {
+	req.checkBody('name', 'Milestone name should be more than 5 characters long.').isLength({min: 5});
+	req.checkBody('description', 'Milestone description should be more than 5 characters long.').isLength({min: 5});
+	req.checkBody('plannedDate', 'Milestone planned date should be a valid ISO8601 date i.e. \'2018-09-03T05:59:29+00:00\'.').isISO8601();
+	req.checkBody('actualDate', 'Milestone actual date should be a valid ISO8601 date i.e. \'2018-09-03T05:59:29+00:00\'.').isISO8601();
+	req.checkBody('value', 'Milestone value should be a valid number in range [1,10].').isInt({min: 1, max: 10});
+};
 
 const logRequest = function(req) {
 	logInfo({
