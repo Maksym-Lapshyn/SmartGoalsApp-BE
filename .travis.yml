@@ -13,6 +13,7 @@ before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/travis-ci
 - ssh-add /tmp/travis-ci
+- mkdir logs
 deploy:
   provider: script
   skip_cleanup: true
