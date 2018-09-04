@@ -11,70 +11,150 @@ info:
         url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 basePath: /api
 tags:
-    -
-        name: goal
+    -   name: Goals
         description: 'Everything about your Goals'
+        externalDocs:
+            description: 'Find out more'
+            url: 'http://swagger.io'
+    -   name: Milestones
+        description: 'Everything about your Milestones'
         externalDocs:
             description: 'Find out more'
             url: 'http://swagger.io'
 paths:
     /goals:
         post:
-            tags: [goal]
+            tags: [Goals]
             summary: 'Create a goal'
             description: ""
             operationId: addgoal
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{in: body, name: body, description: 'Goal object that needs to be created', required: true, schema: {$ref: '#/definitions/Goal'}}]
-            responses: {'201': {description: 'Goal created', schema: {$ref: '#/definitions/Goal'}}, '400': {description: 'Invalid input'}}
+            parameters: [{in: body, name: body, description: 'Goal object that needs to be created', required: true, schema: {$ref: '#/definitions/Goal_Write'}}]
+            responses: {'201': {description: 'Goal created', schema: {$ref: '#/definitions/Goal_Read'}}, '400': {description: 'Invalid input'}}
         get:
-            tags: [goal]
+            tags: [Goals]
             summary: 'Get all goals'
             description: ""
             operationId: getallgoals
             consumes: [application/json]
             produces: [application/json]
-            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goals'}}}
-    '/goals/{id}':
+            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goals_Read'}}}
+    /goals/{id}:
         get:
-            tags: [goal]
+            tags: [Goals]
             summary: 'Find a goal by id'
             description: 'Returns a single goal'
             operationId: getgoalbyid
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Id of pet to return', required: true, type: string, format: string}]
-            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goal'}}, '404': {description: 'Goal not found'}}
+            parameters: [{name: id, in: path, description: 'Id of goal to return', required: true, type: string, format: string}]
+            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goal_Read'}}, '404': {description: 'Goal not found'}}
         put:
-            tags: [goal]
+            tags: [Goals]
             summary: 'Update a goal'
             description: ""
             operationId: updategoal
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Id of goal that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object that needs to be updated', required: true, schema: {$ref: '#/definitions/Goal'}}]
+            parameters: [{name: id, in: path, description: 'Id of goal that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object that needs to be updated', required: true, schema: {$ref: '#/definitions/Goal_Write'}}]
             responses: {'204': {description: 'Goal updated'}, '400': {description: 'Invalid input'}}
         delete:
-            tags: [goal]
+            tags: [Goals]
             summary: 'Delete a goal'
             description: ""
             operationId: deletegoal
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Goal id to delete', required: true, type: string, format: string}]
+            parameters: [{name: id, in: path, description: 'Id of goal to delete', required: true, type: string, format: string}]
             responses: {'204': {description: 'Goal deleted'}}
+    /goals/{goalId}/milestones:
+        post:
+            tags: [Milestones]
+            summary: 'Create a milestone'
+            description: ""
+            operationId: addmilestone
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: goalId, in: path, description: 'Id of goal that will be updated with new milestone', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object that needs to be created', required: true, schema: {$ref: '#/definitions/Milestone_Write'}}]
+            responses: {'201': {description: 'Milestone created', schema: {$ref: '#/definitions/Milestone_Read'}}, '400': {description: 'Invalid input'}}
+        get:
+            tags: [Milestones]
+            summary: 'Get all milestones by goal'
+            description: ""
+            operationId: getallmilestonesbygoal
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for milestones', required: true, type: string, format: string}]
+            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestones_Read'}}}
+    /goals/{goalId}/milestones/{id}:
+        get:
+            tags: [Milestones]
+            summary: 'Find a milestone by id'
+            description: 'Returns a single milestone'
+            operationId: getmilestonebyid
+            produces: [application/json]
+            parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for a milestone', required: true, type: string, format: string}, {name: id, in: path, description: 'Id of milestone to return', required: true, type: string, format: string}]
+            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestone_Read'}}, '404': {description: 'Milestone not found'}}
+        put:
+            tags: [Milestones]
+            summary: 'Update a milestone'
+            description: ""
+            operationId: updatedmilestone
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for a milestone', required: true, type: string, format: string}, {name: id, in: path, description: 'Id of milestone that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object that needs to be updated', required: true, schema: {$ref: '#/definitions/Milestone_Write'}}]
+            responses: {'204': {description: 'Milestone updated'}, '400': {description: 'Invalid input'}}
+        delete:
+            tags: [Milestones]
+            summary: 'Delete a milestone'
+            description: ""
+            operationId: deletemilestone
+            produces: [application/json]
+            parameters: [{name: goalId, in: path, description: 'Id of goal to remove milestone from', required: true, type: string, format: string}, {name: id, in: path, description: 'Milestone id to delete', required: true, type: string, format: string}]
+            responses: {'204': {description: 'Milestone deleted'}}
 definitions:
-    Goal:
+    Goal_Read:
         type: object
         properties:
             _id: {type: string, format: string}
             name: {type: string, format: string}
             description: {type: string, format: string}
-        xml:
-            name: Goal
-    Goals:
+            startDate: {type: string, format: date-time}
+            endDate: {type: string, format: date-time}
+            milestones: {type: array, items: {$ref: '#/definitions/Milestone_Read'}}
+            tags: {type: array, items: {type: string}}
+    Goal_Write:
+        type: object
+        properties:
+            name: {type: string, format: string}
+            description: {type: string, format: string}
+            startDate: {type: string, format: date-time}
+            endDate: {type: string, format: date-time}
+            tags: {type: array, items: {type: string}}
+    Goals_Read:
         type: array
         items:
-            $ref: '#/definitions/Goal'
+            $ref: '#/definitions/Goal_Read'
+    Milestone_Read:
+        type: object
+        properties:
+            _id: {type: string, format: string}
+            name: {type: string, format: string}
+            description: {type: string, format: string}
+            plannedDate: {type: string, format: date-time}
+            actualDate: {type: string, format: date-time}
+            value: {type: number, minimum: 1, maximum: 10}
+    Milestone_Write:
+        type: object
+        properties:
+            name: {type: string, format: string}
+            description: {type: string, format: string}
+            plannedDate: {type: string, format: date-time}
+            actualDate: {type: string, format: date-time}
+            value: {type: number, minimum: 1, maximum: 10}
+    Milestones_Read:
+        type: array
+        items:
+            $ref: '#/definitions/Milestone_Read'
 externalDocs:
     description: 'Find out more about Swagger'
     url: 'http://swagger.io'

@@ -15,7 +15,7 @@ import validator from 'express-validator';
 connectToDatabase();
 
 const app = express();
-const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger-copy.yml', 'utf8'));
+const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
 
 // create directory for logs if it does not exist
 if (!fs.existsSync('logs')) {
