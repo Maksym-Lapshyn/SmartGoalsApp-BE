@@ -3,6 +3,7 @@ sudo: false
 node_js:
 - lts/*
 install:
+- npm install -g babel-cli
 - npm install
 script:
 - npm run build
