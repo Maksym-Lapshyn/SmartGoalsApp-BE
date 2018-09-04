@@ -5,65 +5,66 @@ const create = function (req, res, next) {
 	logRequest(req);
 	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
 	validateBody(req);
-
-	var errors = req.validationErrors();
-
-	if (errors) {
-		res.status(400);
-		res.json(errors);
-	}
-
-	const milestone = req.body;
-	const goalId = req.params.goalId;
 	
-	milestoneService.create(goalId, milestone).then(newMilestone => {
-		res.status(201);
-		res.json(newMilestone);
-	}).catch(err => {
-		next(err);
-	});
+	var validationErrors = req.validationErrors();
+
+	if (validationErrors) {
+		res.status(400);
+		res.json(validationErrors);
+	} else {
+		const milestone = req.body;
+		const goalId = req.params.goalId;
+		
+		milestoneService.create(goalId, milestone).then(newMilestone => {
+			res.status(201);
+			res.json(newMilestone);
+			res.end();
+		}).catch(err => {
+			next(err);
+		});
+	}
 }
 
 const getAllByParent = function (req, res, next) {
 	logRequest(req);
-	validateParams(req);
+	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
+	
+	var validationErrors = req.validationErrors();
 
-	var errors = req.validationErrors();
-
-	if (errors) {
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const goalId = req.params.goalId;
+
+		milestoneService.getAllByParent(goalId).then(milestones => {
+			res.status(200);
+			res.json(milestones);
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const goalId = req.params.goalId;
-
-	milestoneService.getAllByParent(goalId).then(milestones => {
-		res.status(200);
-		res.json(milestones);
-	}).catch(err => {
-		next(err);
-	});
 };
 
 const getSingle = function (req, res, next) {
 	logRequest(req);
 	validateParams(req);
 
-	var errors = req.validationErrors();
+	var validationErrors = req.validationErrors();
 
-	if (errors) {
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const id = req.params.id;
+
+		milestoneService.getSingle(id).then(milestone => {
+			res.status(200);
+			res.json(milestone);
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const id = req.params.id;
-
-	milestoneService.getSingle(id).then(milestone => {
-		res.status(200);
-		res.json(milestone);
-	}).catch(err => {
-		next(err);
-	});
 }
 
 const update = function (req, res, next) {
@@ -71,44 +72,44 @@ const update = function (req, res, next) {
 	validateParams(req);
 	validateBody(req);
 
-	var errors = req.validationErrors();
+	var validationErrors = req.validationErrors();
 
-	if (errors) {
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const id = req.params.id;
+		const milestone = req.body;
+	
+		milestoneService.update(id, milestone).then(() => {
+			res.status(204);
+			res.end();
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const id = req.params.id;
-	const milestone = req.body;
-
-	milestoneService.update(id, milestone).then(() => {
-		res.status(204);
-		res.end();
-	}).catch(err => {
-		next(err);
-	});
 }
 
 const remove = function (req, res, next) {
 	logRequest(req);
 	validateParams(req);
 
-	var errors = req.validationErrors();
+	var validationErrors = req.validationErrors();
 
-	if (errors) {
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const id = req.params.id;
+		const goalId = req.params.goalId;
+	
+		milestoneService.remove(id, goalId).then(() => {
+			res.status(204);
+			res.end();
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const id = req.params.id;
-	const goalId = req.params.goalId;
-
-	milestoneService.remove(id, goalId).then(() => {
-		res.status(204);
-		res.end();
-	}).catch(err => {
-		next(err);
-	});
 }
 
 const validateParams = function(req) {

@@ -27,7 +27,7 @@ paths:
             tags: [Goals]
             summary: 'Create a goal'
             description: ""
-            operationId: addGoal
+            operationId: addgoal
             consumes: [application/json]
             produces: [application/json]
             parameters: [{in: body, name: body, description: 'Goal object that needs to be created', required: true, schema: {$ref: '#/definitions/Goal_Write'}}]
@@ -36,7 +36,7 @@ paths:
             tags: [Goals]
             summary: 'Get all goals'
             description: ""
-            operationId: getAllGoals
+            operationId: getallgoals
             consumes: [application/json]
             produces: [application/json]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goals_Read'}}}
@@ -45,7 +45,7 @@ paths:
             tags: [Goals]
             summary: 'Find a goal by id'
             description: 'Returns a single goal'
-            operationId: getGoalById
+            operationId: getgoalbyid
             produces: [application/json]
             parameters: [{name: id, in: path, description: 'Id of goal to return', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goal_Read'}}, '404': {description: 'Goal not found'}}
@@ -53,7 +53,7 @@ paths:
             tags: [Goals]
             summary: 'Update a goal'
             description: ""
-            operationId: updateGoal
+            operationId: updategoal
             consumes: [application/json]
             produces: [application/json]
             parameters: [{name: id, in: path, description: 'Id of goal that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object that needs to be updated', required: true, schema: {$ref: '#/definitions/Goal_Write'}}]
@@ -62,7 +62,7 @@ paths:
             tags: [Goals]
             summary: 'Delete a goal'
             description: ""
-            operationId: deleteGoal
+            operationId: deletegoal
             produces: [application/json]
             parameters: [{name: id, in: path, description: 'Id of goal to delete', required: true, type: string, format: string}]
             responses: {'204': {description: 'Goal deleted'}}
@@ -71,7 +71,7 @@ paths:
             tags: [Milestones]
             summary: 'Create a milestone'
             description: ""
-            operationId: addMilestone
+            operationId: addmilestone
             consumes: [application/json]
             produces: [application/json]
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be updated with new milestone', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object that needs to be created', required: true, schema: {$ref: '#/definitions/Milestone_Write'}}]
@@ -80,7 +80,7 @@ paths:
             tags: [Milestones]
             summary: 'Get all milestones by goal'
             description: ""
-            operationId: getAllMilestonesByGoal
+            operationId: getallmilestonesbygoal
             consumes: [application/json]
             produces: [application/json]
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for milestones', required: true, type: string, format: string}]
@@ -90,7 +90,7 @@ paths:
             tags: [Milestones]
             summary: 'Find a milestone by id'
             description: 'Returns a single milestone'
-            operationId: getMilestoneById
+            operationId: getmilestonebyid
             produces: [application/json]
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for a milestone', required: true, type: string, format: string}, {name: id, in: path, description: 'Id of milestone to return', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestone_Read'}}, '404': {description: 'Milestone not found'}}
@@ -98,7 +98,7 @@ paths:
             tags: [Milestones]
             summary: 'Update a milestone'
             description: ""
-            operationId: updatedMilestone
+            operationId: updatedmilestone
             consumes: [application/json]
             produces: [application/json]
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for a milestone', required: true, type: string, format: string}, {name: id, in: path, description: 'Id of milestone that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object that needs to be updated', required: true, schema: {$ref: '#/definitions/Milestone_Write'}}]
@@ -107,7 +107,7 @@ paths:
             tags: [Milestones]
             summary: 'Delete a milestone'
             description: ""
-            operationId: deleteMilestone
+            operationId: deletemilestone
             produces: [application/json]
             parameters: [{name: goalId, in: path, description: 'Id of goal to remove milestone from', required: true, type: string, format: string}, {name: id, in: path, description: 'Milestone id to delete', required: true, type: string, format: string}]
             responses: {'204': {description: 'Milestone deleted'}}
@@ -118,8 +118,8 @@ definitions:
             _id: {type: string, format: string}
             name: {type: string, format: string}
             description: {type: string, format: string}
-            startDate: {type: string, format: date}
-            endDate: {type: string, format: date}
+            startDate: {type: string, format: date-time}
+            endDate: {type: string, format: date-time}
             milestones: {type: array, items: {$ref: '#/definitions/Milestone_Read'}}
             tags: {type: array, items: {type: string}}
     Goal_Write:
@@ -127,8 +127,8 @@ definitions:
         properties:
             name: {type: string, format: string}
             description: {type: string, format: string}
-            startDate: {type: string, format: date}
-            endDate: {type: string, format: date}
+            startDate: {type: string, format: date-time}
+            endDate: {type: string, format: date-time}
             tags: {type: array, items: {type: string}}
     Goals_Read:
         type: array
@@ -140,16 +140,16 @@ definitions:
             _id: {type: string, format: string}
             name: {type: string, format: string}
             description: {type: string, format: string}
-            plannedDate: {type: string, format: date}
-            actualDate: {type: string, format: date}
+            plannedDate: {type: string, format: date-time}
+            actualDate: {type: string, format: date-time}
             value: {type: number, minimum: 1, maximum: 10}
     Milestone_Write:
         type: object
         properties:
             name: {type: string, format: string}
             description: {type: string, format: string}
-            plannedDate: {type: string, format: date}
-            actualDate: {type: string, format: date}
+            plannedDate: {type: string, format: date-time}
+            actualDate: {type: string, format: date-time}
             value: {type: number, minimum: 1, maximum: 10}
     Milestones_Read:
         type: array

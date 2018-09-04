@@ -25,10 +25,6 @@ const goalSchema = new mongoose.Schema({
 	}
 });
 
-goalSchema.pre('find' | 'findOne', function () {
-	this.populate('milestones');
-});
-
 export {
 	goalSchema
 };

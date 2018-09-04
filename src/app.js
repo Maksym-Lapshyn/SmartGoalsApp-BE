@@ -25,11 +25,7 @@ if (!fs.existsSync('logs')) {
 app.use(logger('dev'));
 app.use(json());
 app.use(cookieParser());
-
-app.use(urlencoded({
-	extended: false
-}));
-
+app.use(urlencoded({extended: false}));
 app.use(validator());
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));

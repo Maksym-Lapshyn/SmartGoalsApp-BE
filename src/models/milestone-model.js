@@ -4,7 +4,7 @@ import { mileStoneSchema } from '../schemas/milestone-schema';
 import { factorSchema } from '../schemas/factor-schema';
 
 // load all models for child schemas in order to be populated in parents
-mongoose.model('Factor', factorSchema);
+// mongoose.model('Factor', factorSchema);
 
 const Milestone = mongoose.model('Milestone', mileStoneSchema);
 
@@ -18,7 +18,7 @@ const create = function (goalId, milestone) {
 
 		Milestone.create(milestone).then(newMilestone => {
 			goalModel.getSingle(goalId).then(goal => {
-				goal.milestones.push(milestone._id);
+				goal.milestones.push(newMilestone._id);
 
 				goalModel.update(goalId, goal).then(() => {
 					resolve(newMilestone);

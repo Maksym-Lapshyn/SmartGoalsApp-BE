@@ -3,8 +3,7 @@ import { goalSchema } from '../schemas/goal-schema';
 import { mileStoneSchema } from '../schemas/milestone-schema';
 
 // load all models for child schemas in order to be populated in parents
-mongoose.model('Milestone', mileStoneSchema);
-
+const Milestone = mongoose.model('Milestone', mileStoneSchema);
 const Goal = mongoose.model('Goal', goalSchema);
 
 const create = function (goal) {
@@ -23,7 +22,7 @@ const create = function (goal) {
 
 const getAll = function () {
 	return new Promise((resolve, reject) => {
-		Goal.find().then(goals => {
+		Goal.find().populate('milestones').then(goals => {
 			resolve(goals);
 		}).catch(err => {
 			reject(err);
@@ -37,11 +36,7 @@ const getSingle = function (id) {
 			reject(new Error(`Argument id: "${id}" is invalid.`));
 		}
 
-		const searchCriteria = {
-			_id: id
-		};
-
-		Goal.findOne(searchCriteria).then(goal => {
+		Goal.findById(id).populate('milestones').then(goal => {
 			resolve(goal);
 		}).catch(err => {
 			reject(err);
@@ -71,14 +66,23 @@ const remove = function(id) {
 			reject(new Error(`Argument id: "${id}" is invalid.`));
 		}
 
-		const searchCriteria = {
-			_id: id
-		};
+		Goal.findById(id).then(goal => {
+			const deleteCriteria = {
+				_id: { 
+					$in: goal.milestones
+				}
+			};
 
-		Goal.deleteOne(searchCriteria).then(() => {
-			resolve();
-		}).catch(err => {
-			reject(err);
+			console.log(goal.milestones);
+
+			// remove all milestones first
+			Milestone.deleteMany(deleteCriteria);
+
+			Goal.findByIdAndRemove(id).then(() => {
+				resolve();
+			}).catch(err => {
+				reject(err);
+			});
 		});
 	});
 };

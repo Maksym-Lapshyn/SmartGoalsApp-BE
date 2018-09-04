@@ -5,22 +5,20 @@ import createError from 'http-errors';
 const create = function (req, res, next) {
 	logRequest(req);
 	validateBody(req);
-
-	var errors = req.validationErrors();
-
-	if (errors) {
-		res.status(400);
-		res.json(errors);
-	}
-
-	const goal = req.body;
 	
-	goalService.create(goal).then(newGoal => {
-		res.status(201);
-		res.json(newGoal);
-	}).catch(err => {
-		next(err);
-	});
+	if (validationErrors) {
+		res.status(400);
+		res.json(validationErrors);
+	} else {
+		const goal = req.body;
+	
+		goalService.create(goal).then(newGoal => {
+			res.status(201);
+			res.json(newGoal);
+		}).catch(err => {
+			next(err);
+		});
+	}
 };
 
 const getAll = function (req, res, next) {
@@ -37,22 +35,22 @@ const getAll = function (req, res, next) {
 const getSingle = function (req, res, next) {
 	logRequest(req);
 	validateParams(req);
-
-	var errors = req.validationErrors();
-
-	if (errors) {
+	
+	var validationErrors = req.validationErrors();
+	
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const id = req.params.id;
+
+		goalService.getSingle(id).then(goal => {
+			res.status(200);
+			res.json(goal);
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const id = req.params.id;
-
-	goalService.getSingle(id).then(goal => {
-		res.status(200);
-		res.json(goal);
-	}).catch(err => {
-		next(err);
-	});
 };
 
 const update = function (req, res, next) {
@@ -60,43 +58,43 @@ const update = function (req, res, next) {
 	validateParams(req);
 	validateBody(req);
 
-	var errors = req.validationErrors();
+	var validationErrors = req.validationErrors();
 
-	if (errors) {
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const id = req.params.id;
+		const goal = req.body;
+	
+		goalService.update(id, goal).then(() => {
+			res.status(204);
+			res.end();
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const id = req.params.id;
-	const goal = req.body;
-
-	goalService.update(id, goal).then(() => {
-		res.status(204);
-		res.end();
-	}).catch(err => {
-		next(err);
-	});
 };
 
 const remove = function (req, res, next) {
 	logRequest(req);
 	validateParams(req);
+	
+	var validationErrors = req.validationErrors();
 
-	var errors = req.validationErrors();
-
-	if (errors) {
+	if (validationErrors) {
 		res.status(400);
-		res.json(errors);
+		res.json(validationErrors);
+	} else {
+		const id = req.params.id;
+
+		goalService.remove(id).then(() => {
+			res.status(204);
+			res.end();
+		}).catch(err => {
+			next(err);
+		});
 	}
-
-	const id = req.params.id;
-
-	goalService.remove(id).then(() => {
-		res.status(204);
-		res.end();
-	}).catch(err => {
-		next(err);
-	});
 };
 
 const validateParams = function(req) {
