@@ -150,7 +150,6 @@ definitions:
             description: {type: string, format: string}
             plannedDate: {type: string, format: date-time}
             actualDate: {type: string, format: date-time}
-            value: {type: number, minimum: 1, maximum: 10}
     Milestones_Read:
         type: array
         items:

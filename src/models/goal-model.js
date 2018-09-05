@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import { goalSchema } from '../schemas/goal-schema';
 import { mileStoneSchema } from '../schemas/milestone-schema';
 
-// load all models for child schemas in order to be populated in parents
 const Milestone = mongoose.model('Milestone', mileStoneSchema);
 const Goal = mongoose.model('Goal', goalSchema);
 
@@ -86,12 +85,27 @@ const remove = function(id) {
 	});
 };
 
+const checkIfExists = function (id) {
+	return new Promise((resolve, reject) => {
+		Goal.find({_id: id}).then(goals => {
+			if (goals && goals.length !== 0) {
+				resolve(true);
+			} else {
+				resolve(false);
+			}
+		}).catch(err => {
+			reject(err);
+		});
+	});
+};
+
 const goalModel = {
 	create: create,
 	getAll: getAll,
 	getSingle: getSingle,
 	update: update,
-	remove: remove
+	remove: remove,
+	checkIfExists: checkIfExists
 };
 
 export {

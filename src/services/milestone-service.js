@@ -50,12 +50,23 @@ const remove = function(id, goalId) {
 	});
 };
 
+const checkIfExists = function(id) {
+	return new Promise((resolve, reject) => {
+		milestoneModel.checkIfExists(id).then(isExisting => {
+			resolve(isExisting);
+		}).catch(err => {
+			reject(err);
+		})
+	});
+};
+
 const milestoneService = {
 	create: create,
 	getAllByParent: getAllByParent,
 	getSingleByParent: getSingleByParent,
 	update: update,
-	remove: remove
+	remove: remove,
+	checkIfExists: checkIfExists
 };
 
 export {

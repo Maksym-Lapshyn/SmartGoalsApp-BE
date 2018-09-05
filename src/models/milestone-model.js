@@ -1,10 +1,6 @@
 import mongoose from 'mongoose';
 import { goalModel } from './goal-model';
 import { mileStoneSchema } from '../schemas/milestone-schema';
-import { factorSchema } from '../schemas/factor-schema';
-
-// load all models for child schemas in order to be populated in parents
-// mongoose.model('Factor', factorSchema);
 
 const Milestone = mongoose.model('Milestone', mileStoneSchema);
 
@@ -16,18 +12,22 @@ const create = function (goalId, milestone) {
 			reject(new Error(`Argument milestone: "${milestone}" is invalid.`));
 		}
 
-		Milestone.create(milestone).then(newMilestone => {
-			goalModel.getSingle(goalId).then(goal => {
-				goal.milestones.push(newMilestone._id);
+		goalModel.getSingle(goalId).then(goal => {
+			if (!goal) {
+				reject(new Error(`Goal with id "${goalId}" does not exist.`));
+			} else {
+				Milestone.create(milestone).then(newMilestone => {
+					goal.milestones.push(newMilestone._id);
 
-				goalModel.update(goalId, goal).then(() => {
-					resolve(newMilestone);
+					goalModel.update(goalId, goal).then(() => {
+						resolve(newMilestone);
+					}).catch(err => {
+						reject(err);
+					});
 				}).catch(err => {
 					reject(err);
 				});
-			}).catch(err => {
-				reject(err);
-			});
+			}
 		}).catch(err => {
 			reject(err);
 		});
@@ -108,12 +108,27 @@ const remove = function(id, goalId) {
 	});
 };
 
+const checkIfExists = function (id) {
+	return new Promise((resolve, reject) => {
+		Milestone.find({_id: id}).then(milestones => {
+			if (milestones && milestones.length !== 0) {
+				resolve(true);
+			} else {
+				resolve(false);
+			}
+		}).catch(err => {
+			reject(err);
+		});
+	});
+};
+
 const milestoneModel = {
 	create: create,
 	getSingleByParent: getSingleByParent,
 	getAllByParent: getAllByParent,
 	update: update,
-	remove: remove
+	remove: remove,
+	checkIfExists: checkIfExists
 };
 
 export {

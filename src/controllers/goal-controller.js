@@ -48,7 +48,7 @@ const getSingle = function (req, res, next) {
 		goalService.getSingle(id).then(goal => {
 			if (!goal) {
 				res.status(404);
-				res.statusMessage = `Goal with id \'${id}\' does not exist.`;
+				res.statusMessage = `Goal with id: "${id}" does not exist.`;
 				res.end();
 			} else {
 				res.status(200);

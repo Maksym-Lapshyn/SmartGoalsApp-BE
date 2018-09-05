@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { contributorSchema } from './contributor-schema';
 
 const factorSchema = new mongoose.Schema({
 	name: {

@@ -50,12 +50,23 @@ const remove = function(id) {
 	});
 };
 
+const checkIfExists = function(id) {
+	return new Promise((resolve, reject) => {
+		goalModel.checkIfExists(id).then(isExisting => {
+			resolve(isExisting);
+		}).catch(err => {
+			reject(err);
+		})
+	});
+};
+
 const goalService = {
 	create: create,
 	getAll: getAll,
 	getSingle: getSingle,
 	update: update,
-	remove: remove
+	remove: remove,
+	checkIfExists: checkIfExists
 };
 
 export {

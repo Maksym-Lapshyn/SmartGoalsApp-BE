@@ -1,11 +1,12 @@
 import { logInfo } from '../logger';
 import { milestoneService } from '../services/milestone-service';
+import { goalService } from '../services/goal-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
 	validateGoalId(req);
 	validateBody(req);
-	
+
 	var validationErrors = req.validationErrors();
 
 	if (validationErrors) {
@@ -14,11 +15,21 @@ const create = function (req, res, next) {
 	} else {
 		const milestone = req.body;
 		const goalId = req.params.goalId;
-		
-		milestoneService.create(goalId, milestone).then(newMilestone => {
-			res.status(201);
-			res.json(newMilestone);
-			res.end();
+
+		goalService.checkIfExists(goalId).then(exists => {
+			if (!exists) {
+				rest.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.end();
+			} else {
+				milestoneService.create(goalId, milestone).then(newMilestone => {
+					res.status(201);
+					res.json(newMilestone);
+					res.end();
+				}).catch(err => {
+					next(err);
+				});
+			}
 		}).catch(err => {
 			next(err);
 		});
@@ -37,9 +48,19 @@ const getAllByParent = function (req, res, next) {
 	} else {
 		const goalId = req.params.goalId;
 
-		milestoneService.getAllByParent(goalId).then(milestones => {
-			res.status(200);
-			res.json(milestones);
+		goalService.checkIfExists(goalId).then(exists => {
+			if (!exists) {
+				rest.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.end();
+			} else {
+				milestoneService.getAllByParent(goalId).then(milestones => {
+					res.status(200);
+					res.json(milestones);
+				}).catch(err => {
+					next(err);
+				});
+			}
 		}).catch(err => {
 			next(err);
 		});
@@ -60,14 +81,24 @@ const getSingleByParent = function (req, res, next) {
 		const id = req.params.id;
 		const goalId = req.params.goalId;
 
-		milestoneService.getSingleByParent(id, goalId).then(milestone => {
-			if (!milestone) {
-				res.status(404);
-				res.statusMessage = `Milestone with id \'${id}\' and goal id \'${goalId}\' does not exist.`;
+		goalService.checkIfExists(goalId).then(exists => {
+			if (!exists) {
+				rest.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				res.status(200);
-				res.json(milestone);
+				milestoneService.getSingleByParent(id, goalId).then(milestone => {
+					if (!milestone) {
+						res.status(404);
+						res.statusMessage = `Milestone with id: "${id}" does not exist.`;
+						res.end();
+					} else {
+						res.status(200);
+						res.json(milestone);
+					}
+				}).catch(err => {
+					next(err);
+				});
 			}
 		}).catch(err => {
 			next(err);
