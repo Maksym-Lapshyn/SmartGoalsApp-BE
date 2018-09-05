@@ -1,10 +1,11 @@
 import { logInfo } from '../logger';
 import { goalService } from '../services/goal-service';
-import createError from 'http-errors';
 
 const create = function (req, res, next) {
 	logRequest(req);
 	validateBody(req);
+
+	var validationErrors = req.validationErrors();
 	
 	if (validationErrors) {
 		res.status(400);
@@ -45,8 +46,14 @@ const getSingle = function (req, res, next) {
 		const id = req.params.id;
 
 		goalService.getSingle(id).then(goal => {
-			res.status(200);
-			res.json(goal);
+			if (!goal) {
+				res.status(404);
+				res.statusMessage = `Goal with id \'${id}\' does not exist.`;
+				res.end();
+			} else {
+				res.status(200);
+				res.json(goal);
+			}
 		}).catch(err => {
 			next(err);
 		});
@@ -99,7 +106,7 @@ const remove = function (req, res, next) {
 
 const validateParams = function(req) {
 	req.checkParams('id', 'Goal id should be a valid identifier.').isMongoId();
-}
+};
 
 const validateBody = function(req) {
 	req.checkBody('name', 'Goal name should be more than 5 characters long.').isLength({min: 5});

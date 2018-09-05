@@ -73,13 +73,12 @@ const remove = function(id) {
 				}
 			};
 
-			console.log(goal.milestones);
-
-			// remove all milestones first
-			Milestone.deleteMany(deleteCriteria);
-
-			Goal.findByIdAndRemove(id).then(() => {
-				resolve();
+			Milestone.deleteMany(deleteCriteria).then(() => {
+				Goal.findByIdAndRemove(id).then(() => {
+					resolve();
+				}).catch(err => {
+					reject(err);
+				});
 			}).catch(err => {
 				reject(err);
 			});

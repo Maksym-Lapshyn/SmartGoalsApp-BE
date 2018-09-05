@@ -48,21 +48,23 @@ const getAllByParent = function (goalId) {
 	});
 }
 
-const getSingle = function (id) {
+const getSingleByParent = function (id, goalId) {
 	return new Promise((resolve, reject) => {
 		if (!id) {
 			reject(new Error(`Argument id: "${id}" is invalid.`));
+		} else if (!goalId) {
+			reject(new Error(`Argument goal id: "${goalId}" is invalid.`));
 		}
 
-		const searchCriteria = {
-			_id: id
-		};
+		goalModel.getSingle(goalId).then(goal => {
+			const milestone = goal.milestones.find(function(element) {
+				return element._id.toString() === id.toString();
+			});
 
-		Milestone.findOne(searchCriteria).then(milestone => {
 			resolve(milestone);
 		}).catch(err => {
 			reject(err);
-		});
+		})
 	});
 };
 
@@ -90,19 +92,11 @@ const remove = function(id, goalId) {
 			reject(new Error(`Argument goal id: "${goalId}" is invalid.`));
 		}
 
-		const searchCriteria = {
-			_id: goalId
-		};
-
-		goalModel.findOne(searchCriteria).then(goal => {
-			const deleteCriteria = {
-				_id: id
-			};
-
+		goalModel.findById(goalId).then(goal => {
 			goal.milestones.pull(deleteCriteria);
 
 			goalModel.update(goalId, goal).then(updatedGoal => {
-				Milestone.deleteOne(deleteCriteria).then(() => {
+				Milestone.findByIdAndRemove(id).then(() => {
 					resolve();
 				}).catch(err => {
 					reject(err);
@@ -116,7 +110,7 @@ const remove = function(id, goalId) {
 
 const milestoneModel = {
 	create: create,
-	getSingle: getSingle,
+	getSingleByParent: getSingleByParent,
 	getAllByParent: getAllByParent,
 	update: update,
 	remove: remove

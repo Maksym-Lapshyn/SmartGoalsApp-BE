@@ -11,12 +11,12 @@ info:
         url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 basePath: /api
 tags:
-    -   name: Goals
+    -   name: goals
         description: 'Everything about your Goals'
         externalDocs:
             description: 'Find out more'
             url: 'http://swagger.io'
-    -   name: Milestones
+    -   name: milestones
         description: 'Everything about your Milestones'
         externalDocs:
             description: 'Find out more'
@@ -24,7 +24,7 @@ tags:
 paths:
     /goals:
         post:
-            tags: [Goals]
+            tags: [goals]
             summary: 'Create a goal'
             description: ""
             operationId: addgoal
@@ -33,7 +33,7 @@ paths:
             parameters: [{in: body, name: body, description: 'Goal object that needs to be created', required: true, schema: {$ref: '#/definitions/Goal_Write'}}]
             responses: {'201': {description: 'Goal created', schema: {$ref: '#/definitions/Goal_Read'}}, '400': {description: 'Invalid input'}}
         get:
-            tags: [Goals]
+            tags: [goals]
             summary: 'Get all goals'
             description: ""
             operationId: getallgoals
@@ -42,7 +42,7 @@ paths:
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goals_Read'}}}
     /goals/{id}:
         get:
-            tags: [Goals]
+            tags: [goals]
             summary: 'Find a goal by id'
             description: 'Returns a single goal'
             operationId: getgoalbyid
@@ -50,7 +50,7 @@ paths:
             parameters: [{name: id, in: path, description: 'Id of goal to return', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goal_Read'}}, '404': {description: 'Goal not found'}}
         put:
-            tags: [Goals]
+            tags: [goals]
             summary: 'Update a goal'
             description: ""
             operationId: updategoal
@@ -59,7 +59,7 @@ paths:
             parameters: [{name: id, in: path, description: 'Id of goal that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object that needs to be updated', required: true, schema: {$ref: '#/definitions/Goal_Write'}}]
             responses: {'204': {description: 'Goal updated'}, '400': {description: 'Invalid input'}}
         delete:
-            tags: [Goals]
+            tags: [goals]
             summary: 'Delete a goal'
             description: ""
             operationId: deletegoal
@@ -68,7 +68,7 @@ paths:
             responses: {'204': {description: 'Goal deleted'}}
     /goals/{goalId}/milestones:
         post:
-            tags: [Milestones]
+            tags: [milestones]
             summary: 'Create a milestone'
             description: ""
             operationId: addmilestone
@@ -77,7 +77,7 @@ paths:
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be updated with new milestone', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object that needs to be created', required: true, schema: {$ref: '#/definitions/Milestone_Write'}}]
             responses: {'201': {description: 'Milestone created', schema: {$ref: '#/definitions/Milestone_Read'}}, '400': {description: 'Invalid input'}}
         get:
-            tags: [Milestones]
+            tags: [milestones]
             summary: 'Get all milestones by goal'
             description: ""
             operationId: getallmilestonesbygoal
@@ -87,7 +87,7 @@ paths:
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestones_Read'}}}
     /goals/{goalId}/milestones/{id}:
         get:
-            tags: [Milestones]
+            tags: [milestones]
             summary: 'Find a milestone by id'
             description: 'Returns a single milestone'
             operationId: getmilestonebyid
@@ -95,7 +95,7 @@ paths:
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for a milestone', required: true, type: string, format: string}, {name: id, in: path, description: 'Id of milestone to return', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestone_Read'}}, '404': {description: 'Milestone not found'}}
         put:
-            tags: [Milestones]
+            tags: [milestones]
             summary: 'Update a milestone'
             description: ""
             operationId: updatedmilestone
@@ -104,7 +104,7 @@ paths:
             parameters: [{name: goalId, in: path, description: 'Id of goal that will be queried for a milestone', required: true, type: string, format: string}, {name: id, in: path, description: 'Id of milestone that needs to be updated', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object that needs to be updated', required: true, schema: {$ref: '#/definitions/Milestone_Write'}}]
             responses: {'204': {description: 'Milestone updated'}, '400': {description: 'Invalid input'}}
         delete:
-            tags: [Milestones]
+            tags: [milestones]
             summary: 'Delete a milestone'
             description: ""
             operationId: deletemilestone

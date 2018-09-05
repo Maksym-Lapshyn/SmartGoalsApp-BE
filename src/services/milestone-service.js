@@ -20,9 +20,9 @@ const getAllByParent = function (goalId) {
 	});
 };
 
-const getSingle = function (id) {
+const getSingleByParent = function (id, goalId) {
 	return new Promise((resolve, reject) => {
-		milestoneModel.getSingle(id).then(milestone => {
+		milestoneModel.getSingleByParent(id, goalId).then(milestone => {
 			resolve(milestone);
 		}).catch(err => {
 			reject(err);
@@ -53,7 +53,7 @@ const remove = function(id, goalId) {
 const milestoneService = {
 	create: create,
 	getAllByParent: getAllByParent,
-	getSingle: getSingle,
+	getSingleByParent: getSingleByParent,
 	update: update,
 	remove: remove
 };

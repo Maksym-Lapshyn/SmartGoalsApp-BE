@@ -3,7 +3,7 @@ import { milestoneService } from '../services/milestone-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
-	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
+	validateGoalId(req);
 	validateBody(req);
 	
 	var validationErrors = req.validationErrors();
@@ -23,11 +23,11 @@ const create = function (req, res, next) {
 			next(err);
 		});
 	}
-}
+};
 
 const getAllByParent = function (req, res, next) {
 	logRequest(req);
-	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
+	validateGoalId(req);
 	
 	var validationErrors = req.validationErrors();
 
@@ -46,9 +46,10 @@ const getAllByParent = function (req, res, next) {
 	}
 };
 
-const getSingle = function (req, res, next) {
+const getSingleByParent = function (req, res, next) {
 	logRequest(req);
-	validateParams(req);
+	validateGoalId(req);
+	validateMilestoneId(req);
 
 	var validationErrors = req.validationErrors();
 
@@ -57,19 +58,27 @@ const getSingle = function (req, res, next) {
 		res.json(validationErrors);
 	} else {
 		const id = req.params.id;
+		const goalId = req.params.goalId;
 
-		milestoneService.getSingle(id).then(milestone => {
-			res.status(200);
-			res.json(milestone);
+		milestoneService.getSingleByParent(id, goalId).then(milestone => {
+			if (!milestone) {
+				res.status(404);
+				res.statusMessage = `Milestone with id \'${id}\' and goal id \'${goalId}\' does not exist.`;
+				res.end();
+			} else {
+				res.status(200);
+				res.json(milestone);
+			}
 		}).catch(err => {
 			next(err);
 		});
 	}
-}
+};
 
 const update = function (req, res, next) {
 	logRequest(req);
-	validateParams(req);
+	validateGoalId(req);
+	validateMilestoneId(req);
 	validateBody(req);
 
 	var validationErrors = req.validationErrors();
@@ -88,11 +97,12 @@ const update = function (req, res, next) {
 			next(err);
 		});
 	}
-}
+};
 
 const remove = function (req, res, next) {
 	logRequest(req);
-	validateParams(req);
+	validateGoalId(req);
+	validateMilestoneId(req);
 
 	var validationErrors = req.validationErrors();
 
@@ -110,12 +120,15 @@ const remove = function (req, res, next) {
 			next(err);
 		});
 	}
-}
+};
 
-const validateParams = function(req) {
-	req.checkParams('id', 'Milestone id should be a valid identifier.').isMongoId();
+const validateGoalId = function(req) {
 	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
-}
+};
+
+const validateMilestoneId = function(req) {
+	req.checkParams('id', 'Milestone id should be a valid identifier.').isMongoId();
+};
 
 const validateBody = function(req) {
 	req.checkBody('name', 'Milestone name should be more than 5 characters long.').isLength({min: 5});
@@ -138,7 +151,7 @@ const logRequest = function(req) {
 const milestoneController = {
 	create: create,
 	getAllByParent: getAllByParent,
-	getSingle: getSingle,
+	getSingle: getSingleByParent,
 	update: update,
 	remove: remove
 };
