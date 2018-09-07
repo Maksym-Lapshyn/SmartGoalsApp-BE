@@ -1,4 +1,4 @@
-import {  goalModel } from '../models/goal-model';
+import { goalModel } from '../models/goal-model';
 
 const create = function (goal) {
 	return goalModel.create(goal);

@@ -1,4 +1,4 @@
-import {  milestoneModel } from '../models/milestone-model';
+import { milestoneModel } from '../models/milestone-model';
 
 const create = function (goalId, milestone) {
 	return milestoneModel.create(goalId, milestone);
