@@ -1,63 +1,27 @@
 import {  goalModel } from '../models/goal-model';
 
 const create = function (goal) {
-	return new Promise((resolve, reject) => {
-		goalModel.create(goal).then(newGoal => {
-			resolve(newGoal);
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return goalModel.create(goal);
 };
 
 const getAll = function () {
-	return new Promise((resolve, reject) => {
-		goalModel.getAll().then(goals => {
-			resolve(goals);
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return goalModel.getAll();
 };
 
 const getSingle = function (id) {
-	return new Promise((resolve, reject) => {
-		goalModel.getSingle(id).then(goal => {
-			resolve(goal);
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return goalModel.getSingle(id);
 };
 
 const update = function(id, goal) {
-	return new Promise((resolve, reject) => {
-		goalModel.update(id, goal).then(() => {
-			resolve();
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return goalModel.update(id, goal);
 };
 
 const remove = function(id) {
-	return new Promise((resolve, reject) => {
-		goalModel.remove(id).then(() => {
-			resolve();
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return goalModel.remove(id);
 };
 
 const checkIfExists = function(id) {
-	return new Promise((resolve, reject) => {
-		goalModel.checkIfExists(id).then(isExisting => {
-			resolve(isExisting);
-		}).catch(err => {
-			reject(err);
-		})
-	});
+	return goalModel.checkIfExists(id);
 };
 
 const goalService = {

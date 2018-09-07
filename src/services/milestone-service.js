@@ -1,63 +1,27 @@
 import {  milestoneModel } from '../models/milestone-model';
 
 const create = function (goalId, milestone) {
-	return new Promise((resolve, reject) => {
-		milestoneModel.create(goalId, milestone).then(newMilestone => {
-			resolve(newMilestone);
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return milestoneModel.create(goalId, milestone);
 };
 
 const getAllByParent = function (goalId) {
-	return new Promise((resolve, reject) => {
-		milestoneModel.getAllByParent(goalId).then(milestones => {
-			resolve(milestones);
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return milestoneModel.getAllByParent(goalId);
 };
 
 const getSingleByParent = function (id, goalId) {
-	return new Promise((resolve, reject) => {
-		milestoneModel.getSingleByParent(id, goalId).then(milestone => {
-			resolve(milestone);
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return milestoneModel.getSingleByParent(id, goalId);
 };
 
 const update = function(id, milestone) {
-	return new Promise((resolve, reject) => {
-		milestoneModel.update(id, milestone).then(() => {
-			resolve();
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return milestoneModel.update(id, milestone);
 };
 
 const remove = function(id, goalId) {
-	return new Promise((resolve, reject) => {
-		milestoneModel.remove(id, goalId).then(() => {
-			resolve();
-		}).catch(err => {
-			reject(err);
-		});
-	});
+	return milestoneModel.remove(id, goalId);
 };
 
 const checkIfExists = function(id) {
-	return new Promise((resolve, reject) => {
-		milestoneModel.checkIfExists(id).then(isExisting => {
-			resolve(isExisting);
-		}).catch(err => {
-			reject(err);
-		})
-	});
+	return milestoneModel.checkIfExists(id);
 };
 
 const milestoneService = {
