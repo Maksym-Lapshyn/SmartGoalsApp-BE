@@ -31,7 +31,7 @@ const getAll = function (req, res, next) {
 	}).catch(err => {
 		next(err);
 	});
-};;
+};
 
 const getSingle = function (req, res, next) {
 	logRequest(req);

@@ -8,16 +8,16 @@ const create = function (goalId, milestone) {
 	if (!goalId) {
 		throw new Error(`Argument goal id: "${goalId}" is invalid.`);
 	} else if (!milestone) {
-		throw new Error(`Argument milestone is invalid.`);
+		throw new Error('Argument milestone is invalid.');
 	}
 
 	return goalModel.getSingle(goalId).then(goal => {
-		return Milestone.create(milestone);
-	}).then(newMilestone => {
-		goal.milestones.push(newMilestone._id);
+		return Milestone.create(milestone).then(newMilestone => {
+			goal.milestones.push(newMilestone._id);
 
-		return goalModel.update(goalId, goal).then(() => {
-			return newMilestone;
+			return goalModel.update(goalId, goal).then(() => {
+				return newMilestone;
+			});
 		});
 	});
 };
@@ -64,7 +64,7 @@ const remove = function(id, goalId) {
 	}
 
 	return goalModel.getSingle(goalId).then(goal => {
-		goal.milestones.pull(deleteCriteria);
+		goal.milestones.pull(goal);
 
 		return goal;
 	}).then(goal => {

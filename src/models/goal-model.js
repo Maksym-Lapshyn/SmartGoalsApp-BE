@@ -9,7 +9,7 @@ const Goal = mongoose.model('Goal', goalSchema);
 
 const create = function (goal) {
 	if (!goal) {
-		throw new Error(`Argument goal is invalid.`);
+		throw new Error('Argument goal is invalid.');
 	}
 
 	return Goal.create(goal);
@@ -41,7 +41,7 @@ const update = function(id, goal) {
 	if (!id) {
 		throw new Error(`Argument id: "${id}" is invalid.`);
 	} else if (!goal) {
-		throw new Error(`Argument goal is invalid.`);
+		throw new Error('Argument goal is invalid.');
 	}
 
 	return Goal.findByIdAndUpdate(id, goal);

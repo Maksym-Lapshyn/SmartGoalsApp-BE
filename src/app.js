@@ -19,7 +19,7 @@ const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
 
 // create directory for logs if it does not exist
 if (!fs.existsSync('logs')) {
-    fs.mkdirSync('logs');
+	fs.mkdirSync('logs');
 }
 
 app.use(logger('dev'));
@@ -38,7 +38,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
 	const status = err.status || 500;
 	const message = err.message;
 
@@ -57,4 +57,4 @@ app.use(function (err, req, res, next) {
 	res.end();
 });
 
-export default app
+export default app;

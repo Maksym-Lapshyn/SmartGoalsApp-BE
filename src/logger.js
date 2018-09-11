@@ -49,4 +49,4 @@ export {
 	logDebug,
 	logError,
 	logInfo
-}
+};

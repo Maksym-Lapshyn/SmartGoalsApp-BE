@@ -18,7 +18,7 @@ const create = function (req, res, next) {
 
 		goalService.checkIfExists(goalId).then(exists => {
 			if (!exists) {
-				rest.status(404);
+				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
@@ -50,7 +50,7 @@ const getAllByParent = function (req, res, next) {
 
 		goalService.checkIfExists(goalId).then(exists => {
 			if (!exists) {
-				rest.status(404);
+				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
@@ -83,7 +83,7 @@ const getSingleByParent = function (req, res, next) {
 
 		goalService.checkIfExists(goalId).then(exists => {
 			if (!exists) {
-				rest.status(404);
+				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
