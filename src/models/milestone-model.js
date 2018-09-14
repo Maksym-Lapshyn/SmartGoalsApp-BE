@@ -64,10 +64,8 @@ const remove = function(id, goalId) {
 	}
 
 	return goalModel.getSingle(goalId).then(goal => {
-		goal.milestones.pull(goal);
+		goal.milestones.pull(id);
 
-		return goal;
-	}).then(goal => {
 		return goalModel.update(goalId, goal);
 	}).then(() => {
 		return Milestone.findByIdAndRemove(id);

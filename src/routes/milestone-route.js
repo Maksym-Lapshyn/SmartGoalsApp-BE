@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { milestoneController } from '../controllers/milestone-controller'
+import { milestoneController } from '../controllers/milestone-controller';
 
 const routerOptions = {
 	mergeParams: true

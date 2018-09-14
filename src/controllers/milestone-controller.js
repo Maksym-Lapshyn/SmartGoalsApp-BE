@@ -2,6 +2,40 @@ import { logInfo } from '../logger';
 import { milestoneService } from '../services/milestone-service';
 import { goalService } from '../services/goal-service';
 
+// const create = function (req, res, next) {
+// 	logRequest(req);
+// 	validateGoalId(req);
+// 	validateBody(req);
+
+// 	var validationErrors = req.validationErrors();
+
+// 	if (validationErrors) {
+// 		res.status(400);
+// 		res.json(validationErrors);
+// 	} else {
+// 		const milestone = req.body;
+// 		const goalId = req.params.goalId;
+
+// 		goalService.checkIfExists(goalId).then(exists => {
+// 			if (!exists) {
+// 				res.status(404);
+// 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+// 				res.end();
+// 			} else {
+// 				milestoneService.create(goalId, milestone).then(newMilestone => {
+// 					res.status(201);
+// 					res.json(newMilestone);
+// 					res.end();
+// 				}).catch(err => {
+// 					next(err);
+// 				});
+// 			}
+// 		}).catch(err => {
+// 			next(err);
+// 		});
+// 	}
+// };
+
 const create = function (req, res, next) {
 	logRequest(req);
 	validateGoalId(req);
@@ -22,19 +56,48 @@ const create = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				milestoneService.create(goalId, milestone).then(newMilestone => {
-					res.status(201);
-					res.json(newMilestone);
-					res.end();
-				}).catch(err => {
-					next(err);
-				});
+				return milestoneService.create(goalId, milestone);
 			}
+		}).then(newMilestone => {
+			res.status(201);
+			res.json(newMilestone);
+			res.end();
 		}).catch(err => {
 			next(err);
 		});
 	}
 };
+
+// const getAllByParent = function (req, res, next) {
+// 	logRequest(req);
+// 	validateGoalId(req);
+	
+// 	var validationErrors = req.validationErrors();
+
+// 	if (validationErrors) {
+// 		res.status(400);
+// 		res.json(validationErrors);
+// 	} else {
+// 		const goalId = req.params.goalId;
+
+// 		goalService.checkIfExists(goalId).then(exists => {
+// 			if (!exists) {
+// 				res.status(404);
+// 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+// 				res.end();
+// 			} else {
+// 				milestoneService.getAllByParent(goalId).then(milestones => {
+// 					res.status(200);
+// 					res.json(milestones);
+// 				}).catch(err => {
+// 					next(err);
+// 				});
+// 			}
+// 		}).catch(err => {
+// 			next(err);
+// 		});
+// 	}
+// };
 
 const getAllByParent = function (req, res, next) {
 	logRequest(req);
@@ -54,18 +117,55 @@ const getAllByParent = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				milestoneService.getAllByParent(goalId).then(milestones => {
-					res.status(200);
-					res.json(milestones);
-				}).catch(err => {
-					next(err);
-				});
+				return milestoneService.getAllByParent(goalId);
 			}
+		}).then(milestones => {
+			res.status(200);
+			res.json(milestones);
 		}).catch(err => {
 			next(err);
 		});
 	}
 };
+
+// const getSingleByParent = function (req, res, next) {
+// 	logRequest(req);
+// 	validateGoalId(req);
+// 	validateMilestoneId(req);
+
+// 	var validationErrors = req.validationErrors();
+
+// 	if (validationErrors) {
+// 		res.status(400);
+// 		res.json(validationErrors);
+// 	} else {
+// 		const id = req.params.id;
+// 		const goalId = req.params.goalId;
+
+// 		goalService.checkIfExists(goalId).then(exists => {
+// 			if (!exists) {
+// 				res.status(404);
+// 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+// 				res.end();
+// 			} else {
+// 				milestoneService.getSingleByParent(id, goalId).then(milestone => {
+// 					if (!milestone) {
+// 						res.status(404);
+// 						res.statusMessage = `Milestone with id: "${id}" does not exist.`;
+// 						res.end();
+// 					} else {
+// 						res.status(200);
+// 						res.json(milestone);
+// 					}
+// 				}).catch(err => {
+// 					next(err);
+// 				});
+// 			}
+// 		}).catch(err => {
+// 			next(err);
+// 		});
+// 	}
+// };
 
 const getSingleByParent = function (req, res, next) {
 	logRequest(req);
@@ -87,24 +187,46 @@ const getSingleByParent = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				milestoneService.getSingleByParent(id, goalId).then(milestone => {
-					if (!milestone) {
-						res.status(404);
-						res.statusMessage = `Milestone with id: "${id}" does not exist.`;
-						res.end();
-					} else {
-						res.status(200);
-						res.json(milestone);
-					}
-				}).catch(err => {
-					next(err);
-				});
+				return milestoneService.getSingleByParent(id, goalId);
+			}
+		}).then((milestone) => {
+			if (!milestone) {
+				res.status(404);
+				res.statusMessage = `Milestone with id: "${id}" does not exist.`;
+				res.end();
+			} else {
+				res.status(200);
+				res.json(milestone);
 			}
 		}).catch(err => {
 			next(err);
 		});
 	}
 };
+
+// const update = function (req, res, next) {
+// 	logRequest(req);
+// 	validateGoalId(req);
+// 	validateMilestoneId(req);
+// 	validateBody(req);
+
+// 	var validationErrors = req.validationErrors();
+
+// 	if (validationErrors) {
+// 		res.status(400);
+// 		res.json(validationErrors);
+// 	} else {
+// 		const id = req.params.id;
+// 		const milestone = req.body;
+	
+// 		milestoneService.update(id, milestone).then(() => {
+// 			res.status(204);
+// 			res.end();
+// 		}).catch(err => {
+// 			next(err);
+// 		});
+// 	}
+// };
 
 const update = function (req, res, next) {
 	logRequest(req);
@@ -120,8 +242,17 @@ const update = function (req, res, next) {
 	} else {
 		const id = req.params.id;
 		const milestone = req.body;
+		const goalId = req.params.goalId;
 	
-		milestoneService.update(id, milestone).then(() => {
+		goalService.checkIfExists(goalId).then(exists => {
+			if (!exists) {
+				res.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.end();
+			} else {
+				return milestoneService.update(id, milestone);
+			}
+		}).then(() => {
 			res.status(204);
 			res.end();
 		}).catch(err => {
@@ -129,6 +260,29 @@ const update = function (req, res, next) {
 		});
 	}
 };
+
+// const remove = function (req, res, next) {
+// 	logRequest(req);
+// 	validateGoalId(req);
+// 	validateMilestoneId(req);
+
+// 	var validationErrors = req.validationErrors();
+
+// 	if (validationErrors) {
+// 		res.status(400);
+// 		res.json(validationErrors);
+// 	} else {
+// 		const id = req.params.id;
+// 		const goalId = req.params.goalId;
+	
+// 		milestoneService.remove(id, goalId).then(() => {
+// 			res.status(204);
+// 			res.end();
+// 		}).catch(err => {
+// 			next(err);
+// 		});
+// 	}
+// };
 
 const remove = function (req, res, next) {
 	logRequest(req);
@@ -144,7 +298,15 @@ const remove = function (req, res, next) {
 		const id = req.params.id;
 		const goalId = req.params.goalId;
 	
-		milestoneService.remove(id, goalId).then(() => {
+		goalService.checkIfExists(goalId).then(exists => {
+			if (!exists) {
+				res.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.end();
+			} else {
+				return milestoneService.remove(id, goalId);
+			}
+		}).then(() => {
 			res.status(204);
 			res.end();
 		}).catch(err => {
