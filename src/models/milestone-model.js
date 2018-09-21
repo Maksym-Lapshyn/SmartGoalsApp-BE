@@ -5,12 +5,6 @@ import { mileStoneSchema } from '../schemas/milestone-schema';
 const Milestone = mongoose.model('Milestone', mileStoneSchema);
 
 const create = function (goalId, milestone) {
-	if (!goalId) {
-		throw new Error(`Argument goal id: "${goalId}" is invalid.`);
-	} else if (!milestone) {
-		throw new Error('Argument milestone is invalid.');
-	}
-
 	return goalModel.getSingle(goalId).then(goal => {
 		return Milestone.create(milestone).then(newMilestone => {
 			goal.milestones.push(newMilestone._id);
@@ -23,62 +17,42 @@ const create = function (goalId, milestone) {
 };
 
 const getAllByParent = function (goalId) {
-	if (!goalId) {
-		throw new Error(`Argument goal id: "${goalId}" is invalid.`);
-	}
-
 	return goalModel.getSingle(goalId).then(goal => {
 		return goal.milestones;
 	});
 };
 
-const getSingleByParent = function (id, goalId) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	} else if (!goalId) {
-		throw new Error(`Argument goal id: "${goalId}" is invalid.`);
-	}
-
+const getSingleByParent = function (milestoneId, goalId) {
 	return goalModel.getSingle(goalId).then(goal => {
 		return goal.milestones.find(function(element) {
-			return element._id.toString() === id.toString();
+			return element._id.toString() === milestoneId.toString();
 		});
 	});
 };
 
-const update = function(id, milestone) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	} else if (!milestone) {
-		throw new Error(`Argument milestone: "${milestone}" is invalid.`);
-	}
-
-	return Milestone.findByIdAndUpdate(id, milestone);
+const update = function(milestoneId, milestone) {
+	return Milestone.findByIdAndUpdate(milestoneId, milestone);
 };
 
-const remove = function(id, goalId) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	} if (!goalId) {
-		throw new Error(`Argument goal id: "${goalId}" is invalid.`);
-	}
-
+const remove = function(milestoneId, goalId) {
 	return goalModel.getSingle(goalId).then(goal => {
-		goal.milestones.pull(id);
+		goal.milestones.pull(milestoneId);
 
 		return goalModel.update(goalId, goal);
 	}).then(() => {
-		return Milestone.findByIdAndRemove(id);
+		return Milestone.findByIdAndRemove(milestoneId);
 	});
 };
 
-const checkIfExists = function (id) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	}
-
-	Milestone.find({_id: id}).then(milestones => {
-		return milestones && milestones.length !== 0;
+const checkIfExists = function (milestoneId, goalId) {
+	return goalModel.checkIfExists(goalId).then(goalExists => {
+		if (!goalExists) {
+			return false;
+		} else {
+			return Milestone.find({_id: milestoneId}).then(milestones => {
+				return milestones && milestones.length > 0;
+			});
+		}
 	});
 };
 

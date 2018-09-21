@@ -9,8 +9,8 @@ const router = Router(routerOptions);
 
 router.post('/', milestoneController.create);
 router.get('/', milestoneController.getAllByParent);
-router.get('/:id', milestoneController.getSingle);
-router.put('/:id', milestoneController.update);
-router.delete('/:id', milestoneController.remove);
+router.get('/:milestoneId', milestoneController.getSingle);
+router.put('/:milestoneId', milestoneController.update);
+router.delete('/:milestoneId', milestoneController.remove);
 
 export default router;

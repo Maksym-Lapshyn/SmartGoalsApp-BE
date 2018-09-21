@@ -1,7 +1,6 @@
 import { logInfo } from '../logger';
 import { factorService } from '../services/factor-service';
 import { milestoneService } from '../services/milestone-service';
-import { goalService } from '../services/goal-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
@@ -18,26 +17,18 @@ const create = function (req, res, next) {
 		const milestoneId = req.params.milestoneId;
 		const goalId = req.params.goalId;
 
-		goalService.checkIfExists(goalId).then(exists => {
+		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
 				res.end();
 			} else {
-				return milestoneService.checkIfExists(milestoneId);
+				factorService.create(milestoneId, goalId, factor).then(newFactor => {
+					res.status(201);
+					res.json(newFactor);
+					res.end();
+				});
 			}
-		}).then(milestoneExists => {
-			if (!milestoneExists) {
-				res.status(404);
-				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
-				res.end();
-			} else {
-				return factorService.create(milestoneId, factor);
-			}
-		}).then(newFactor => {
-			res.status(201);
-			res.json(newFactor);
-			res.end();
 		}).catch(err => {
 			next(err);
 		});
@@ -57,25 +48,17 @@ const getAllByParent = function (req, res, next) {
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		goalService.checkIfExists(goalId).then(exists => {
+		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
 				res.end();
 			} else {
-				return milestoneService.checkIfExists(milestoneId);
+				factorService.getAllByParent(milestoneId, goalId).then(factors => {
+					res.status(200);
+					res.json(factors);
+				});
 			}
-		}).then(milestoneExists => {
-			if (!milestoneExists) {
-				res.status(404);
-				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
-				res.end();
-			} else {
-				return factorService.getAllByParent(milestoneId);
-			}
-		}).then(factors => {
-			res.status(200);
-			res.json(factors);
 		}).catch(err => {
 			next(err);
 		});
@@ -93,34 +76,26 @@ const getSingleByParent = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const id = req.params.id;
+		const factorId = req.params.factorId;
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		goalService.checkIfExists(goalId).then(exists => {
+		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
 				res.end();
 			} else {
-				return milestoneService.checkIfExists(milestoneId);
-			}
-		}).then(milestoneExists => {
-			if (!milestoneExists) {
-				res.status(404);
-				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
-				res.end();
-			} else {
-				return factorService.getSingleByParent(id, milestoneId);
-			}
-		}).then(factor => {
-			if (!factor) {
-				res.status(404);
-				res.statusMessage = `Factor with id: "${id}" does not exist.`;
-				res.end();
-			} else {
-				res.status(200);
-				res.json(factor);
+				factorService.getSingleByParent(factorId, milestoneId).then(factor => {
+					if (!factor) {
+						res.status(404);
+						res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
+						res.end();
+					} else {
+						res.status(200);
+						res.json(factor);
+					}
+				});
 			}
 		}).catch(err => {
 			next(err);
@@ -140,30 +115,22 @@ const update = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const id = req.params.id;
+		const factorId = req.params.factorId;
 		const factor = req.body;
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		goalService.checkIfExists(goalId).then(exists => {
+		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
 				res.end();
 			} else {
-				return milestoneService.checkIfExists(milestoneId);
+				factorService.update(factorId, factor).then(() => {
+					res.status(204);
+					res.end();
+				});
 			}
-		}).then(milestoneExists => {
-			if (!milestoneExists) {
-				res.status(404);
-				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
-				res.end();
-			} else {
-				return factorService.update(id, factor);
-			}
-		}).then(() => {
-			res.status(204);
-			res.end();
 		}).catch(err => {
 			next(err);
 		});
@@ -181,29 +148,21 @@ const remove = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const id = req.params.id;
+		const factorId = req.params.factorId;
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
-	
-		goalService.checkIfExists(goalId).then(exists => {
+
+		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
 				res.end();
 			} else {
-				return milestoneService.checkIfExists(milestoneId);
+				factorService.remove(factorId, milestoneId).then(() => {
+					res.status(204);
+					res.end();
+				});
 			}
-		}).then(milestoneExists => {
-			if (!milestoneExists) {
-				res.status(404);
-				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
-				res.end();
-			} else {
-				return factorService.remove(id, milestoneId);
-			}
-		}).then(() => {
-			res.status(204);
-			res.end();
 		}).catch(err => {
 			next(err);
 		});

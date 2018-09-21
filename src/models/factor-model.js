@@ -4,81 +4,58 @@ import { factorSchema } from '../schemas/factor-schema';
 
 const Factor = mongoose.model('Factor', factorSchema);
 
-const create = function (milestoneId, factor) {
-	if (!milestoneId) {
-		throw new Error(`Argument milestone id: "${milestoneId}" is invalid.`);
-	} else if (!factor) {
-		throw new Error('Argument factor is invalid.');
-	}
-
-	return milestoneModel.getSingle(milestoneId).then(milestone => {
+const create = function (milestoneId, goalId, factor) {
+	return milestoneModel.getSingleByParent(milestoneId, goalId).then(milestone => {
 		return Factor.create(factor).then(newFactor => {
+			console.log(newFactor._id);
 			milestone.factors.push(newFactor._id);
+			console.log(milestone);
 
 			return milestoneModel.update(milestoneId, milestone).then(() => {
+				console.log(milestone);
 				return newFactor;
 			});
 		});
 	});
 };
 
-const getAllByParent = function (milestoneId) {
-	if (!milestoneId) {
-		throw new Error(`Argument milestone id: "${milestoneId}" is invalid.`);
-	}
-
-	return milestoneModel.getSingle(milestoneId).then(milestone => {
+const getAllByParent = function (milestoneId, goalId) {
+	return milestoneModel.getSingleByParent(milestoneId, goalId).then(milestone => {
 		return milestone.factors;
 	});
 };
 
-const getSingleByParent = function (id, milestoneId) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	} else if (!milestoneId) {
-		throw new Error(`Argument milestone id: "${milestoneId}" is invalid.`);
-	}
-
-	return milestoneModel.getSingle(milestoneId).then(milestone => {
+const getSingleByParent = function (factorId, milestoneId, goalId) {
+	return milestoneModel.getSingleByParent(milestoneId, goalId).then(milestone => {
 		return milestone.factors.find(function(element) {
-			return element._id.toString() === id.toString();
+			return element._id.toString() === factorId.toString();
 		});
 	});
 };
 
-const update = function(id, factor) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	} else if (!factor) {
-		throw new Error(`Argument factor: "${factor}" is invalid.`);
-	}
-
-	return Factor.findByIdAndUpdate(id, factor);
+const update = function(factorId, factor) {
+	return Factor.findByIdAndUpdate(factorId, factor);
 };
 
-const remove = function(id, milestoneId) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	} if (!milestoneId) {
-		throw new Error(`Argument milestone id: "${milestoneId}" is invalid.`);
-	}
-
-	return milestoneModel.getSingle(milestoneId).then(milestone => {
-		milestone.factors.pull(id);
+const remove = function(factorId, milestoneId, goalId) {
+	return milestoneModel.getSingleByParent(milestoneId, goalId).then(milestone => {
+		milestone.factors.pull(factorId);
 
 		return milestoneModel.update(milestoneId, milestone);
 	}).then(() => {
-		return Factor.findByIdAndRemove(id);
+		return Factor.findByIdAndRemove(factorId);
 	});
 };
 
-const checkIfExists = function (id) {
-	if (!id) {
-		throw new Error(`Argument id: "${id}" is invalid.`);
-	}
-
-	Factor.find({_id: id}).then(factors => {
-		return factors && factors.length !== 0;
+const checkIfExists = function (factorId, milestoneId, goalId) {
+	return milestoneModel.checkIfExists(milestoneId, goalId).then(milestoneExists => {
+		if (!milestoneExists) {
+			return false;
+		} else {
+			return Factor.find({_id: factorId}).then(factors => {
+				return factors && factors.length > 0;
+			});
+		}
 	});
 };
 

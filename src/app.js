@@ -3,8 +3,9 @@ import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { connectToDatabase } from './database';
-import goalsRoute from './routes/goal-route';
+import goalRoute from './routes/goal-route';
 import milestoneRoute from './routes/milestone-route';
+import factorRoute from './routes/factor-route';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'js-yaml';
 import { logError } from './logger';
@@ -29,8 +30,9 @@ app.use(urlencoded({extended: false}));
 app.use(validator());
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
-app.use('/api/goals', goalsRoute);
+app.use('/api/goals', goalRoute);
 app.use('/api/goals/:goalId/milestones', milestoneRoute);
+app.use('/api/goals/:goalId/milestones/:milestoneId/factors', factorRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

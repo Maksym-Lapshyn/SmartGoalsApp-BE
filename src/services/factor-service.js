@@ -1,27 +1,27 @@
 import { factorModel } from '../models/factor-model';
 
-const create = function (milestoneId, factor) {
-	return factorModel.create(milestoneId, factor);
+const create = function (milestoneId, goalId, factor) {
+	return factorModel.create(milestoneId, goalId, factor);
 };
 
-const getAllByParent = function (milestoneId) {
-	return factorModel.getAllByParent(milestoneId);
+const getAllByParent = function (milestoneId, goalId) {
+	return factorModel.getAllByParent(milestoneId, goalId);
 };
 
-const getSingleByParent = function (id, milestoneId) {
-	return factorModel.getSingleByParent(id, milestoneId);
+const getSingleByParent = function (factorId, milestoneId, goalId) {
+	return factorModel.getSingleByParent(factorId, milestoneId, goalId);
 };
 
-const update = function(id, factor) {
-	return factorModel.update(id, factor);
+const update = function(factorId, factor) {
+	return factorModel.update(factorId, factor);
 };
 
-const remove = function(id, milestoneId) {
-	return factorModel.remove(id, milestoneId);
+const remove = function(factorId, milestoneId, goalId) {
+	return factorModel.remove(factorId, milestoneId, goalId);
 };
 
-const checkIfExists = function(id) {
-	return factorModel.checkIfExists(id);
+const checkIfExists = function(factorId, milestoneId, goalId) {
+	return factorModel.checkIfExists(factorId, milestoneId, goalId);
 };
 
 const factorService = {

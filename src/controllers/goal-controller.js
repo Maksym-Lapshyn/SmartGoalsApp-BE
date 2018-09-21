@@ -43,12 +43,12 @@ const getSingle = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const id = req.params.id;
+		const goalId = req.params.goalId;
 
-		goalService.getSingle(id).then(goal => {
+		goalService.getSingle(goalId).then(goal => {
 			if (!goal) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${id}" does not exist.`;
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
 				res.status(200);
@@ -71,12 +71,20 @@ const update = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const id = req.params.id;
+		const goalId = req.params.goalId;
 		const goal = req.body;
-	
-		goalService.update(id, goal).then(() => {
-			res.status(204);
-			res.end();
+
+		goalService.checkIfExists(goalId).then(goalExists => {
+			if (!goalExists) {
+				res.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.end();
+			} else {
+				goalService.update(goalId, goal).then(() => {
+					res.status(204);
+					res.end();
+				});
+			}
 		}).catch(err => {
 			next(err);
 		});
@@ -93,11 +101,19 @@ const remove = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const id = req.params.id;
+		const goalId = req.params.goalId;
 
-		goalService.remove(id).then(() => {
-			res.status(204);
-			res.end();
+		goalService.checkIfExists(goalId).then(goalExists => {
+			if (!goalExists) {
+				res.status(404);
+				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
+				res.end();
+			} else {
+				goalService.remove(goalId).then(() => {
+					res.status(204);
+					res.end();
+				});
+			}
 		}).catch(err => {
 			next(err);
 		});
@@ -105,7 +121,7 @@ const remove = function (req, res, next) {
 };
 
 const validateParams = function(req) {
-	req.checkParams('id', 'Goal id should be a valid identifier.').isMongoId();
+	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
 };
 
 const validateBody = function(req) {

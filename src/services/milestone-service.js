@@ -8,20 +8,20 @@ const getAllByParent = function (goalId) {
 	return milestoneModel.getAllByParent(goalId);
 };
 
-const getSingleByParent = function (id, goalId) {
-	return milestoneModel.getSingleByParent(id, goalId);
+const getSingleByParent = function (milestoneId, goalId) {
+	return milestoneModel.getSingleByParent(milestoneId, goalId);
 };
 
-const update = function(id, milestone) {
-	return milestoneModel.update(id, milestone);
+const update = function(milestoneId, milestone) {
+	return milestoneModel.update(milestoneId, milestone);
 };
 
-const remove = function(id, goalId) {
-	return milestoneModel.remove(id, goalId);
+const remove = function(milestoneId, goalId) {
+	return milestoneModel.remove(milestoneId, goalId);
 };
 
-const checkIfExists = function(id) {
-	return milestoneModel.checkIfExists(id);
+const checkIfExists = function(milestoneId, goalId) {
+	return milestoneModel.checkIfExists(milestoneId, goalId);
 };
 
 const milestoneService = {

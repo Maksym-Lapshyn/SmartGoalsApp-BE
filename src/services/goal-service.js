@@ -8,20 +8,20 @@ const getAll = function () {
 	return goalModel.getAll();
 };
 
-const getSingle = function (id) {
-	return goalModel.getSingle(id);
+const getSingle = function (goalId) {
+	return goalModel.getSingle(goalId);
 };
 
-const update = function(id, goal) {
-	return goalModel.update(id, goal);
+const update = function(goalId, goal) {
+	return goalModel.update(goalId, goal);
 };
 
-const remove = function(id) {
-	return goalModel.remove(id);
+const remove = function(goalId) {
+	return goalModel.remove(goalId);
 };
 
-const checkIfExists = function(id) {
-	return goalModel.checkIfExists(id);
+const checkIfExists = function(goalId) {
+	return goalModel.checkIfExists(goalId);
 };
 
 const goalService = {
