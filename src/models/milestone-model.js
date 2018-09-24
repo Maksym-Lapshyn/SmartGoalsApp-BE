@@ -31,7 +31,11 @@ const getSingleByParent = function (milestoneId, goalId) {
 };
 
 const update = function(milestoneId, milestone) {
-	return Milestone.findByIdAndUpdate(milestoneId, milestone);
+	return Milestone.findById(milestoneId).then(existingMilestone => {
+		existingMilestone = Object.assign(existingMilestone, milestone);
+
+		return existingMilestone.save();
+	});
 };
 
 const remove = function(milestoneId, goalId) {

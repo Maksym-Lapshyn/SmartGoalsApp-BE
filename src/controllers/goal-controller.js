@@ -80,7 +80,7 @@ const update = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				goalService.update(goalId, goal).then(() => {
+				return goalService.update(goalId, goal).then(() => {
 					res.status(204);
 					res.end();
 				});
@@ -109,7 +109,7 @@ const remove = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				goalService.remove(goalId).then(() => {
+				return goalService.remove(goalId).then(() => {
 					res.status(204);
 					res.end();
 				});

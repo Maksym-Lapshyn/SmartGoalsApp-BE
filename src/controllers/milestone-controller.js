@@ -22,7 +22,7 @@ const create = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				milestoneService.create(goalId, milestone).then(newMilestone => {
+				return milestoneService.create(goalId, milestone).then(newMilestone => {
 					res.status(201);
 					res.json(newMilestone);
 					res.end();
@@ -52,7 +52,7 @@ const getAllByParent = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				milestoneService.getAllByParent(goalId).then(milestones => {
+				return milestoneService.getAllByParent(goalId).then(milestones => {
 					res.status(200);
 					res.json(milestones);
 				});
@@ -83,7 +83,7 @@ const getSingleByParent = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				milestoneService.getSingleByParent(milestoneId, goalId).then((milestone) => {
+				return milestoneService.getSingleByParent(milestoneId, goalId).then((milestone) => {
 					if (!milestone) {
 						res.status(404);
 						res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
@@ -122,7 +122,7 @@ const update = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
 				res.end();
 			} else {
-				milestoneService.update(milestoneId, milestone).then(() => {
+				return milestoneService.update(milestoneId, milestone).then(() => {
 					res.status(204);
 					res.end();
 				});
@@ -153,7 +153,7 @@ const remove = function (req, res, next) {
 				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
 				res.end();
 			} else {
-				milestoneService.remove(milestoneId, goalId).then(() => {
+				return milestoneService.remove(milestoneId, goalId).then(() => {
 					res.status(204);
 					res.end();
 				});

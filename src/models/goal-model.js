@@ -24,14 +24,20 @@ const getAll = function () {
 const getSingle = function (goalId) {
 	return Goal.findById(goalId).populate({
 		path: 'milestones',
+		model: 'Milestone',
 		populate: {
-			path: 'factors'
+			path: 'factors',
+			model: 'Factor'
 		}
 	});
 };
 
 const update = function(goalId, goal) {
-	return Goal.findByIdAndUpdate(goalId, goal);
+	return Goal.findById(goalId).then(existingGoal => {
+		existingGoal = Object.assign(existingGoal, goal);
+
+		return existingGoal.save();
+	});
 };
 
 const remove = function (goalId) {

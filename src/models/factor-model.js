@@ -7,12 +7,9 @@ const Factor = mongoose.model('Factor', factorSchema);
 const create = function (milestoneId, goalId, factor) {
 	return milestoneModel.getSingleByParent(milestoneId, goalId).then(milestone => {
 		return Factor.create(factor).then(newFactor => {
-			console.log(newFactor._id);
 			milestone.factors.push(newFactor._id);
-			console.log(milestone);
 
 			return milestoneModel.update(milestoneId, milestone).then(() => {
-				console.log(milestone);
 				return newFactor;
 			});
 		});
@@ -34,7 +31,11 @@ const getSingleByParent = function (factorId, milestoneId, goalId) {
 };
 
 const update = function(factorId, factor) {
-	return Factor.findByIdAndUpdate(factorId, factor);
+	return Factor.findById(factorId).then(existingFactor => {
+		existingFactor = Object.assign(existingFactor, factor);
+
+		return existingFactor.save();
+	});
 };
 
 const remove = function(factorId, milestoneId, goalId) {
@@ -53,6 +54,7 @@ const checkIfExists = function (factorId, milestoneId, goalId) {
 			return false;
 		} else {
 			return Factor.find({_id: factorId}).then(factors => {
+				
 				return factors && factors.length > 0;
 			});
 		}

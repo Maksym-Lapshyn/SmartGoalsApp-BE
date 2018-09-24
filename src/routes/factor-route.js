@@ -9,8 +9,8 @@ const router = Router(routerOptions);
 
 router.post('/', factorController.create);
 router.get('/', factorController.getAllByParent);
-router.get('/:id', factorController.getSingle);
-router.put('/:id', factorController.update);
-router.delete('/:id', factorController.remove);
+router.get('/:factorId', factorController.getSingle);
+router.put('/:factorId', factorController.update);
+router.delete('/:factorId', factorController.remove);
 
 export default router;
