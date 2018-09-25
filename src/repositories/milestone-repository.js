@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
-import { goalModel } from './goal-model';
+import { goalRepository } from './goal-repository';
 import { mileStoneSchema } from '../schemas/milestone-schema';
 
 const Milestone = mongoose.model('Milestone', mileStoneSchema);
 
 const create = function (goalId, milestone) {
-	return goalModel.getSingle(goalId).then(goal => {
+	return goalRepository.getSingle(goalId).then(goal => {
 		return Milestone.create(milestone).then(newMilestone => {
 			goal.milestones.push(newMilestone._id);
 
-			return goalModel.update(goalId, goal).then(() => {
+			return goalRepository.update(goalId, goal).then(() => {
 				return newMilestone;
 			});
 		});
@@ -17,13 +17,13 @@ const create = function (goalId, milestone) {
 };
 
 const getAllByParent = function (goalId) {
-	return goalModel.getSingle(goalId).then(goal => {
+	return goalRepository.getSingle(goalId).then(goal => {
 		return goal.milestones;
 	});
 };
 
 const getSingleByParent = function (milestoneId, goalId) {
-	return goalModel.getSingle(goalId).then(goal => {
+	return goalRepository.getSingle(goalId).then(goal => {
 		return goal.milestones.find(function(element) {
 			return element._id.toString() === milestoneId.toString();
 		});
@@ -39,17 +39,17 @@ const update = function(milestoneId, milestone) {
 };
 
 const remove = function(milestoneId, goalId) {
-	return goalModel.getSingle(goalId).then(goal => {
+	return goalRepository.getSingle(goalId).then(goal => {
 		goal.milestones.pull(milestoneId);
 
-		return goalModel.update(goalId, goal);
+		return goalRepository.update(goalId, goal);
 	}).then(() => {
 		return Milestone.findByIdAndRemove(milestoneId);
 	});
 };
 
 const checkIfExists = function (milestoneId, goalId) {
-	return goalModel.checkIfExists(goalId).then(goalExists => {
+	return goalRepository.checkIfExists(goalId).then(goalExists => {
 		if (!goalExists) {
 			return false;
 		} else {
@@ -60,15 +60,15 @@ const checkIfExists = function (milestoneId, goalId) {
 	});
 };
 
-const milestoneModel = {
-	create: create,
-	getSingleByParent: getSingleByParent,
-	getAllByParent: getAllByParent,
-	update: update,
-	remove: remove,
-	checkIfExists: checkIfExists
+const milestoneRepository = {
+	create,
+	getSingleByParent,
+	getAllByParent,
+	update,
+	remove,
+	checkIfExists
 };
 
 export {
-	milestoneModel
+	milestoneRepository
 };

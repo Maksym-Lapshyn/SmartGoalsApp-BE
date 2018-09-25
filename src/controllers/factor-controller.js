@@ -158,13 +158,12 @@ const remove = function (req, res, next) {
 				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
 				res.end();
 			} else {
-				return factorService.remove(factorId, milestoneId).then(() => {
+				return factorService.remove(factorId, milestoneId, goalId).then(() => {
 					res.status(204);
 					res.end();
 				});
 			}
 		}).catch(err => {
-			console.log('INSIDE CATCH');
 			next(err);
 		});
 	}
@@ -197,11 +196,11 @@ const logRequest = function(req) {
 };
 
 const factorController = {
-	create: create,
-	getAllByParent: getAllByParent,
-	getSingle: getSingleByParent,
-	update: update,
-	remove: remove
+	create,
+	getAllByParent,
+	getSingleByParent,
+	update,
+	remove
 };
 
 export {

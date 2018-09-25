@@ -1,36 +1,36 @@
-import { factorModel } from '../models/factor-model';
+import { factorRepository } from '../repositories/factor-repository';
 
 const create = function (milestoneId, goalId, factor) {
-	return factorModel.create(milestoneId, goalId, factor);
+	return factorRepository.create(milestoneId, goalId, factor);
 };
 
 const getAllByParent = function (milestoneId, goalId) {
-	return factorModel.getAllByParent(milestoneId, goalId);
+	return factorRepository.getAllByParent(milestoneId, goalId);
 };
 
 const getSingleByParent = function (factorId, milestoneId, goalId) {
-	return factorModel.getSingleByParent(factorId, milestoneId, goalId);
+	return factorRepository.getSingleByParent(factorId, milestoneId, goalId);
 };
 
 const update = function(factorId, factor) {
-	return factorModel.update(factorId, factor);
+	return factorRepository.update(factorId, factor);
 };
 
 const remove = function(factorId, milestoneId, goalId) {
-	return factorModel.remove(factorId, milestoneId, goalId);
+	return factorRepository.remove(factorId, milestoneId, goalId);
 };
 
 const checkIfExists = function(factorId, milestoneId, goalId) {
-	return factorModel.checkIfExists(factorId, milestoneId, goalId);
+	return factorRepository.checkIfExists(factorId, milestoneId, goalId);
 };
 
 const factorService = {
-	create: create,
-	getAllByParent: getAllByParent,
-	getSingleByParent: getSingleByParent,
-	update: update,
-	remove: remove,
-	checkIfExists: checkIfExists
+	create,
+	getAllByParent,
+	getSingleByParent,
+	update,
+	remove,
+	checkIfExists
 };
 
 export {

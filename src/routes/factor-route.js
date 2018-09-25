@@ -9,7 +9,7 @@ const router = Router(routerOptions);
 
 router.post('/', factorController.create);
 router.get('/', factorController.getAllByParent);
-router.get('/:factorId', factorController.getSingle);
+router.get('/:factorId', factorController.getSingleByParent);
 router.put('/:factorId', factorController.update);
 router.delete('/:factorId', factorController.remove);
 

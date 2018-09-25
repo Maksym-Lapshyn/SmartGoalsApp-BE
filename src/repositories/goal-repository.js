@@ -58,15 +58,15 @@ const checkIfExists = function (id) {
 	});
 };
 
-const goalModel = {
-	create: create,
-	getAll: getAll,
-	getSingle: getSingle,
-	update: update,
-	remove: remove,
-	checkIfExists: checkIfExists
+const goalRepository = {
+	create,
+	getAll,
+	getSingle,
+	update,
+	remove,
+	checkIfExists
 };
 
 export {
-	goalModel
+	goalRepository
 };

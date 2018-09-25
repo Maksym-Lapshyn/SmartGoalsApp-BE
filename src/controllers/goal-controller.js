@@ -142,11 +142,11 @@ const logRequest = function(req) {
 };
 
 const goalController = {
-	create: create,
-	getAll: getAll,
-	getSingle: getSingle,
-	update: update,
-	remove: remove
+	create,
+	getAll,
+	getSingle,
+	update,
+	remove
 };
 
 export {

@@ -1,4 +1,4 @@
-import { goalModel } from '../models/goal-model';
+import { goalModel } from '../repositories/goal-repository';
 
 const create = function (goal) {
 	return goalModel.create(goal);
@@ -25,12 +25,12 @@ const checkIfExists = function(goalId) {
 };
 
 const goalService = {
-	create: create,
-	getAll: getAll,
-	getSingle: getSingle,
-	update: update,
-	remove: remove,
-	checkIfExists: checkIfExists
+	create,
+	getAll,
+	getSingle,
+	update,
+	remove,
+	checkIfExists
 };
 
 export {

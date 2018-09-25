@@ -190,11 +190,11 @@ const logRequest = function(req) {
 };
 
 const milestoneController = {
-	create: create,
-	getAllByParent: getAllByParent,
-	getSingle: getSingleByParent,
-	update: update,
-	remove: remove
+	create,
+	getAllByParent,
+	getSingleByParent,
+	update,
+	remove
 };
 
 export {
