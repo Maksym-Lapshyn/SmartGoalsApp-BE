@@ -126,7 +126,6 @@ const validateParams = function(req) {
 
 const validateBody = function(req) {
 	req.checkBody('name', 'Goal name should be more than 5 characters long.').isLength({min: 5});
-	req.checkBody('description', 'Goal description should be more than 5 characters long.').isLength({min: 5});
 	req.checkBody('startDate', 'Goal start date should be a valid ISO8601 date i.e. \'2018-09-03T05:59:29+00:00\'.').isISO8601();
 	req.checkBody('endDate', 'Goal end date should be a valid ISO8601 date i.e. \'2018-09-03T05:59:29+00:00\'.').isISO8601();
 };

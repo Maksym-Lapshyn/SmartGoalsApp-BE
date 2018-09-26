@@ -1,6 +1,6 @@
 import { logInfo } from '../logger';
 import { factorService } from '../services/factor-service';
-import { milestoneService } from '../services/milestone-service';
+import { contributorService } from '../services/contributor-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
@@ -13,19 +13,20 @@ const create = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const factor = req.body;
+		const contributor = req.body;
+		const factorId = req.params.factorId;
 		const milestoneId = req.params.milestoneId;
 		const goalId = req.params.goalId;
 
-		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
+		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
+				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
 				res.end();
 			} else {
-				return factorService.create(milestoneId, goalId, factor).then(newFactor => {
+				return contributorService.create(factorId, milestoneId, goalId, contributor).then(newContributor => {
 					res.status(201);
-					res.json(newFactor);
+					res.json(newContributor);
 					res.end();
 				});
 			}
@@ -47,16 +48,17 @@ const getAllByParent = function (req, res, next) {
 	} else {
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
+		const factorId = req.params.factorId;
 
-		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
+		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
+				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
 				res.end();
 			} else {
-				return factorService.getAllByParent(milestoneId, goalId).then(factors => {
+				return contributorService.getAllByParent(factorId, milestoneId, goalId).then(contributors => {
 					res.status(200);
-					res.json(factors);
+					res.json(contributors);
 				});
 			}
 		}).catch(err => {
@@ -68,7 +70,7 @@ const getAllByParent = function (req, res, next) {
 const getSingleByParent = function (req, res, next) {
 	logRequest(req);
 	validateParentIds(req);
-	validateFactorId(req);
+	validateContributorId(req);
 
 	var validationErrors = req.validationErrors();
 
@@ -76,24 +78,25 @@ const getSingleByParent = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
+		const contributorId = req.params.contributorId;
 		const factorId = req.params.factorId;
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
+		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
+				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
 				res.end();
 			} else {
-				return factorService.getSingleByParent(factorId, milestoneId, goalId).then(factor => {
-					if (!factor) {
+				return contributorService.getSingleByParent(contributorId, factorId, milestoneId, goalId).then(contributor => {
+					if (!contributor) {
 						res.status(404);
-						res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
+						res.statusMessage = `Contributor with id: "${contributorId}" does not exist.`;
 						res.end();
 					} else {
 						res.status(200);
-						res.json(factor);
+						res.json(contributor);
 					}
 				});
 			}
@@ -106,7 +109,7 @@ const getSingleByParent = function (req, res, next) {
 const update = function (req, res, next) {
 	logRequest(req);
 	validateParentIds(req);
-	validateFactorId(req);
+	validateContributorId(req);
 	validateBody(req);
 
 	var validationErrors = req.validationErrors();
@@ -115,18 +118,19 @@ const update = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
+		const contributorId = req.params.contributorId;
 		const factorId = req.params.factorId;
-		const factor = req.body;
+		const contributor = req.body;
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
+		contributorService.checkIfExists(contributorId, factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
+				res.statusMessage = 'Combination of specified ids does not match any existing contributor.';
 				res.end();
 			} else {
-				return factorService.update(factorId, factor).then(() => {
+				return contributorService.update(contributorId, contributor).then(() => {
 					res.status(204);
 					res.end();
 				});
@@ -140,7 +144,7 @@ const update = function (req, res, next) {
 const remove = function (req, res, next) {
 	logRequest(req);
 	validateParentIds(req);
-	validateFactorId(req);
+	validateContributorId(req);
 
 	var validationErrors = req.validationErrors();
 
@@ -148,17 +152,18 @@ const remove = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
+		const contributorId = req.params.contributorId;
 		const factorId = req.params.factorId;
 		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
+		contributorService.checkIfExists(contributorId, factorId, milestoneId, goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
+				res.statusMessage = 'Combination of specified ids does not match any existing contributor.';
 				res.end();
 			} else {
-				return factorService.remove(factorId, milestoneId, goalId).then(() => {
+				return contributorService.remove(contributorId, factorId, milestoneId, goalId).then(() => {
 					res.status(204);
 					res.end();
 				});
@@ -172,16 +177,15 @@ const remove = function (req, res, next) {
 const validateParentIds = function(req) {
 	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
 	req.checkParams('milestoneId', 'Milestone id should be a valid identifier.').isMongoId();
-};
-
-const validateFactorId = function(req) {
 	req.checkParams('factorId', 'Factor id should be a valid identifier.').isMongoId();
 };
 
+const validateContributorId = function(req) {
+	req.checkParams('contributorId', 'Contributor id should be a valid identifier.').isMongoId();
+};
+
 const validateBody = function(req) {
-	req.checkBody('name', 'Factor name should be more than 5 characters long.').isLength({min: 5});
-	req.checkBody('value', 'Factor value should be an int in range [0..10].').isInt({min: 0, max: 10});
-	req.checkBody('weight', 'Factor weight should be an int in range [0..10].').isInt({min: 0, max: 10});
+	req.checkBody('name', 'Contributor name should be more than 5 characters long.').isLength({min: 5});
 };
 
 const logRequest = function(req) {
@@ -194,7 +198,7 @@ const logRequest = function(req) {
 	});
 };
 
-const factorController = {
+const contributorController = {
 	create,
 	getAllByParent,
 	getSingleByParent,
@@ -203,5 +207,5 @@ const factorController = {
 };
 
 export {
-	factorController
+	contributorController
 };

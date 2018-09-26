@@ -6,6 +6,7 @@ import { connectToDatabase } from './database';
 import goalRoute from './routes/goal-route';
 import milestoneRoute from './routes/milestone-route';
 import factorRoute from './routes/factor-route';
+import contributorRoute from './routes/contributor-route';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'js-yaml';
 import { logError } from './logger';
@@ -33,6 +34,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use('/api/goals', goalRoute);
 app.use('/api/goals/:goalId/milestones', milestoneRoute);
 app.use('/api/goals/:goalId/milestones/:milestoneId/factors', factorRoute);
+app.use('/api/goals/:goalId/milestones/:milestoneId/factors/:factorId/contributors', contributorRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

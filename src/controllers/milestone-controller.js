@@ -174,7 +174,6 @@ const validateMilestoneId = function(req) {
 
 const validateBody = function(req) {
 	req.checkBody('name', 'Milestone name should be more than 5 characters long.').isLength({min: 5});
-	req.checkBody('description', 'Milestone description should be more than 5 characters long.').isLength({min: 5});
 	req.checkBody('plannedDate', 'Milestone planned date should be a valid ISO8601 date i.e. \'2018-09-03T05:59:29+00:00\'.').isISO8601();
 	req.checkBody('actualDate', 'Milestone actual date should be a valid ISO8601 date i.e. \'2018-09-03T05:59:29+00:00\'.').isISO8601();
 };
