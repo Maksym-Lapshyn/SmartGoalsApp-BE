@@ -18,7 +18,7 @@ CREATE TABLE milestones (
     planned_date TIMESTAMP NOT NULL,
 	actual_date TIMESTAMP NULL,
 	value INTEGER NOT NULL CHECK(value >= 1 AND value <= 10),
-	goal_id INTEGER REFERENCES goals(id)
+	goal_id INTEGER REFERENCES goals(id) ON DELETE CASCADE
 );
 
 CREATE TABLE factors (
@@ -27,12 +27,12 @@ CREATE TABLE factors (
     description TEXT NULL,
 	value INTEGER NOT NULL CHECK(value >= 0 AND value <= 10),
 	weight INTEGER NOT NULL CHECK(weight >= 0 AND value <= 10),
-	milestone_id INTEGER REFERENCES milestones(id)
+	milestone_id INTEGER REFERENCES milestones(id) ON DELETE SET NULL
 );
 
 CREATE TABLE contributors (
     id SERIAL primary key,
     name VARCHAR(50) NOT NULL,
     description TEXT NULL,
-	factor_id INTEGER REFERENCES factors(id)
+	factor_id INTEGER REFERENCES factors(id) ON DELETE SET NULL
 );

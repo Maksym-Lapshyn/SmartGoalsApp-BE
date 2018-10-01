@@ -5,8 +5,10 @@ const envConfig = config[process.env.NODE_ENV || 'development'];// eslint-disabl
 const sequelize = new Sequelize(envConfig.database, envConfig.username, envConfig.password, envConfig);
 
 const models = {
-	// Todo: sequelize.import('./models/todo'),
-	// TodoItem: sequelize.import('./models/todoitem'),
+	goal: sequelize.import('./models/goal'),
+	milestone: sequelize.import('./models/milestone'),
+	factor: sequelize.import('./models/factor'),
+	contributor: sequelize.import('./models/contributor')
 };
 
 Object.keys(models).forEach(modelName => {
