@@ -2,7 +2,7 @@ import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import { connectToDatabase } from './database';
+import { connectToDatabase } from './database/connection';
 import goalRoute from './routes/goal-route';
 import milestoneRoute from './routes/milestone-route';
 import factorRoute from './routes/factor-route';
