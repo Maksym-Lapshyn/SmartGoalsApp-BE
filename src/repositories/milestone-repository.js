@@ -15,10 +15,9 @@ const getAllByParent = function (goalId) {
 	});
 };
 
-const getSingleByParent = function (milestoneId, goalId) {
+const getSingle = function (milestoneId) {
 	return models.Milestone.find({
 		where: {
-			goalId: goalId,
 			id: milestoneId
 		}
 	});
@@ -61,7 +60,7 @@ const checkIfExists = function (milestoneId) {
 
 const milestoneRepository = {
 	create,
-	getSingleByParent,
+	getSingle,
 	getAllByParent,
 	update,
 	remove,

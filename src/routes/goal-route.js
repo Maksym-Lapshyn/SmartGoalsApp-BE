@@ -11,6 +11,5 @@ router.put('/:goalId', goalController.update);
 router.delete('/:goalId', goalController.remove);
 router.post('/:goalId/milestones', milestoneController.create);
 router.get('/:goalId/milestones', milestoneController.getAllByParent);
-router.get('/:goalId/milestones/:milestoneId', milestoneController.getSingleByParent);
 
 export default router;

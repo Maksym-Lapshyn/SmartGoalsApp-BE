@@ -95,16 +95,15 @@ paths:
             produces: [application/json]
             parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Milestone'}}}}
-    /goals/{goalId}/milestones/{milestoneId}:
+    /milestones/{milestoneId}:
         get:
             tags: [milestones]
-            summary: 'Find a milestone by id'
+            summary: 'Find milestone by id'
             description: ''
             operationId: getmilestonebyid
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestone'}}, '404': {description: 'Milestone not found'}}
-    /milestones/{milestoneId}:
         put:
             tags: [milestones]
             summary: 'Update a milestone'
@@ -141,15 +140,6 @@ paths:
             produces: [application/json]
             parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
-    /milestones/{milestoneId}/factors/{factorId}:
-        get:
-            tags: [factors]
-            summary: 'Find a factor by id'
-            description: ''
-            operationId: getfactorbyid
-            produces: [application/json]
-            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
-            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Factor'}}, '404': {description: 'Factor not found'}}
     /factors:
         get:
             tags: [factors]
@@ -160,6 +150,14 @@ paths:
             produces: [application/json]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
     /factors/{factorId}:
+        get:
+            tags: [factors]
+            summary: 'Find factor by id'
+            description: ''
+            operationId: getfactorbyid
+            produces: [application/json]
+            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
+            responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Factor'}}, '404': {description: 'Factor not found'}}
         put:
             tags: [factors]
             summary: 'Update a factor'

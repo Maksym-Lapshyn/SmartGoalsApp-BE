@@ -19,10 +19,9 @@ const getAllByParent = function (milestoneId) {
 	});
 };
 
-const getSingleByParent = function (factorId, milestoneId) {
+const getSingle = function (factorId) {
 	return models.Factor.find({
 		where: {
-			milestoneId: milestoneId,
 			id: factorId
 		}
 	});
@@ -65,7 +64,7 @@ const checkIfExists = function (factorId) {
 const factorRepository = {
 	create,
 	getAll,
-	getSingleByParent,
+	getSingle,
 	getAllByParent,
 	update,
 	remove,

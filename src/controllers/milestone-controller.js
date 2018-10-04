@@ -63,10 +63,9 @@ const getAllByParent = function (req, res, next) {
 	}
 };
 
-const getSingleByParent = function (req, res, next) {
+const getSingle = function (req, res, next) {
 	logRequest(req);
 	validateGoalId(req);
-	validateMilestoneId(req);
 
 	var validationErrors = req.validationErrors();
 
@@ -75,12 +74,11 @@ const getSingleByParent = function (req, res, next) {
 		res.json(validationErrors);
 	} else {
 		const milestoneId = req.params.milestoneId;
-		const goalId = req.params.goalId;
 
-		milestoneService.getSingleByParent(milestoneId, goalId).then((milestone) => {
+		milestoneService.getSingle(milestoneId).then((milestone) => {
 			if (!milestone) {
 				res.status(404);
-				res.statusMessage = `Milestone with id: "${milestoneId}" and goal id: "${goalId}" does not exist.`;
+				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
 				res.end();
 			} else {
 				res.status(200);
@@ -176,7 +174,7 @@ const logRequest = function(req) {
 const milestoneController = {
 	create,
 	getAllByParent,
-	getSingleByParent,
+	getSingle,
 	update,
 	remove
 };

@@ -8,8 +8,8 @@ const getAllByParent = function (goalId) {
 	return milestoneRepository.getAllByParent(goalId);
 };
 
-const getSingleByParent = function (milestoneId, goalId) {
-	return milestoneRepository.getSingleByParent(milestoneId, goalId);
+const getSingle = function (milestoneId) {
+	return milestoneRepository.getSingleByParent(milestoneId);
 };
 
 const update = function(milestoneId, milestone) {
@@ -27,7 +27,7 @@ const checkIfExists = function(milestoneId) {
 const milestoneService = {
 	create,
 	getAllByParent,
-	getSingleByParent,
+	getSingle,
 	update,
 	remove,
 	checkIfExists

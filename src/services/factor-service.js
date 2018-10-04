@@ -12,8 +12,8 @@ const getAllByParent = function (milestoneId) {
 	return factorRepository.getAllByParent(milestoneId);
 };
 
-const getSingleByParent = function (factorId, milestoneId) {
-	return factorRepository.getSingleByParent(factorId, milestoneId);
+const getSingle = function (factorId) {
+	return factorRepository.getSingleByParent(factorId);
 };
 
 const update = function(factorId, factor) {
@@ -32,7 +32,7 @@ const factorService = {
 	create,
 	getAll,
 	getAllByParent,
-	getSingleByParent,
+	getSingle,
 	update,
 	remove,
 	checkIfExists

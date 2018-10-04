@@ -74,9 +74,8 @@ const getAllByParent = function (req, res, next) {
 	}
 };
 
-const getSingleByParent = function (req, res, next) {
+const getSingle = function (req, res, next) {
 	logRequest(req);
-	validateMilestoneId(req);
 	validateFactorId(req);
 
 	var validationErrors = req.validationErrors();
@@ -86,24 +85,15 @@ const getSingleByParent = function (req, res, next) {
 		res.json(validationErrors);
 	} else {
 		const factorId = req.params.factorId;
-		const milestoneId = req.params.milestoneId;
 
-		milestoneService.checkIfExists(milestoneId).then(exists => {
-			if (!exists) {
+		factorService.getSingle(factorId).then(factor => {
+			if (!factor) {
 				res.status(404);
-				res.statusMessage = `Milestone with id "${milestoneId}" does not exist.`;
+				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.getSingleByParent(factorId, milestoneId).then(factor => {
-					if (!factor) {
-						res.status(404);
-						res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
-						res.end();
-					} else {
-						res.status(200);
-						res.json(factor);
-					}
-				});
+				res.status(200);
+				res.json(factor);
 			}
 		}).catch(err => {
 			next(err);
@@ -195,7 +185,7 @@ const factorController = {
 	create,
 	getAll,
 	getAllByParent,
-	getSingleByParent,
+	getSingle,
 	update,
 	remove
 };
