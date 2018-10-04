@@ -4,7 +4,7 @@ import { milestoneService } from '../services/milestone-service';
 
 const create = function (req, res, next) {
 	logRequest(req);
-	validateParentIds(req);
+	validateMilestoneId(req);
 	validateBody(req);
 
 	var validationErrors = req.validationErrors();
@@ -15,15 +15,14 @@ const create = function (req, res, next) {
 	} else {
 		const factor = req.body;
 		const milestoneId = req.params.milestoneId;
-		const goalId = req.params.goalId;
 
-		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
+		milestoneService.checkIfExists(milestoneId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
+				res.statusMessage = `Milestone with id "${milestoneId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.create(milestoneId, goalId, factor).then(newFactor => {
+				return factorService.create(milestoneId, factor).then(newFactor => {
 					res.status(201);
 					res.json(newFactor);
 					res.end();
@@ -35,9 +34,20 @@ const create = function (req, res, next) {
 	}
 };
 
+const getAll = function (req, res, next) {
+	logRequest(req);
+
+	return factorService.getAll().then(factors => {
+		res.status(200);
+		res.json(factors);
+	}).catch(err => {
+		next(err);
+	});
+};
+
 const getAllByParent = function (req, res, next) {
 	logRequest(req);
-	validateParentIds(req);
+	validateMilestoneId(req);
 	
 	var validationErrors = req.validationErrors();
 
@@ -45,16 +55,15 @@ const getAllByParent = function (req, res, next) {
 		res.status(400);
 		res.json(validationErrors);
 	} else {
-		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
+		milestoneService.checkIfExists(milestoneId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
+				res.statusMessage = `Milestone with id "${milestoneId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.getAllByParent(milestoneId, goalId).then(factors => {
+				return factorService.getAllByParent(milestoneId).then(factors => {
 					res.status(200);
 					res.json(factors);
 				});
@@ -67,7 +76,7 @@ const getAllByParent = function (req, res, next) {
 
 const getSingleByParent = function (req, res, next) {
 	logRequest(req);
-	validateParentIds(req);
+	validateMilestoneId(req);
 	validateFactorId(req);
 
 	var validationErrors = req.validationErrors();
@@ -77,16 +86,15 @@ const getSingleByParent = function (req, res, next) {
 		res.json(validationErrors);
 	} else {
 		const factorId = req.params.factorId;
-		const goalId = req.params.goalId;
 		const milestoneId = req.params.milestoneId;
 
-		milestoneService.checkIfExists(milestoneId, goalId).then(exists => {
+		milestoneService.checkIfExists(milestoneId).then(exists => {
 			if (!exists) {
 				res.status(404);
-				res.statusMessage = `Goal with id: "${goalId}" does not contain milestone with id "${milestoneId}".`;
+				res.statusMessage = `Milestone with id "${milestoneId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.getSingleByParent(factorId, milestoneId, goalId).then(factor => {
+				return factorService.getSingleByParent(factorId, milestoneId).then(factor => {
 					if (!factor) {
 						res.status(404);
 						res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
@@ -105,7 +113,6 @@ const getSingleByParent = function (req, res, next) {
 
 const update = function (req, res, next) {
 	logRequest(req);
-	validateParentIds(req);
 	validateFactorId(req);
 	validateBody(req);
 
@@ -117,19 +124,15 @@ const update = function (req, res, next) {
 	} else {
 		const factorId = req.params.factorId;
 		const factor = req.body;
-		const goalId = req.params.goalId;
-		const milestoneId = req.params.milestoneId;
 
-		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
-			if (!exists) {
+		return factorService.update(factorId, factor).then(updatedFactor => {
+			if (!updatedFactor) {
 				res.status(404);
-				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
+				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.update(factorId, factor).then(() => {
-					res.status(204);
-					res.end();
-				});
+				res.status(204);
+				res.end();
 			}
 		}).catch(err => {
 			next(err);
@@ -139,7 +142,6 @@ const update = function (req, res, next) {
 
 const remove = function (req, res, next) {
 	logRequest(req);
-	validateParentIds(req);
 	validateFactorId(req);
 
 	var validationErrors = req.validationErrors();
@@ -149,19 +151,15 @@ const remove = function (req, res, next) {
 		res.json(validationErrors);
 	} else {
 		const factorId = req.params.factorId;
-		const goalId = req.params.goalId;
-		const milestoneId = req.params.milestoneId;
 
-		factorService.checkIfExists(factorId, milestoneId, goalId).then(exists => {
-			if (!exists) {
+		return factorService.remove(factorId).then(removedFactor => {
+			if (!removedFactor) {
 				res.status(404);
-				res.statusMessage = 'Combination of specified ids does not match any existing factor.';
+				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.remove(factorId, milestoneId, goalId).then(() => {
-					res.status(204);
-					res.end();
-				});
+				res.status(204);
+				res.end();
 			}
 		}).catch(err => {
 			next(err);
@@ -169,13 +167,12 @@ const remove = function (req, res, next) {
 	}
 };
 
-const validateParentIds = function(req) {
-	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
-	req.checkParams('milestoneId', 'Milestone id should be a valid identifier.').isMongoId();
+const validateMilestoneId = function(req) {
+	req.checkParams('milestoneId', 'Milestone id should be a positive integer.').isInt({min: 1});
 };
 
 const validateFactorId = function(req) {
-	req.checkParams('factorId', 'Factor id should be a valid identifier.').isMongoId();
+	req.checkParams('factorId', 'Factor id should be a positive integer.').isInt({min: 1});
 };
 
 const validateBody = function(req) {
@@ -196,6 +193,7 @@ const logRequest = function(req) {
 
 const factorController = {
 	create,
+	getAll,
 	getAllByParent,
 	getSingleByParent,
 	update,

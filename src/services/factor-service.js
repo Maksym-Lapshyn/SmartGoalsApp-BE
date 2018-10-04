@@ -1,31 +1,36 @@
-import { factorRepository } from '../repositories-old/factor-repository';
+import { factorRepository } from '../repositories/factor-repository';
 
-const create = function (milestoneId, goalId, factor) {
-	return factorRepository.create(milestoneId, goalId, factor);
+const create = function (milestoneId, factor) {
+	return factorRepository.create(milestoneId, factor);
 };
 
-const getAllByParent = function (milestoneId, goalId) {
-	return factorRepository.getAllByParent(milestoneId, goalId);
+const getAll = function () {
+	return factorRepository.getAll();
 };
 
-const getSingleByParent = function (factorId, milestoneId, goalId) {
-	return factorRepository.getSingleByParent(factorId, milestoneId, goalId);
+const getAllByParent = function (milestoneId) {
+	return factorRepository.getAllByParent(milestoneId);
+};
+
+const getSingleByParent = function (factorId, milestoneId) {
+	return factorRepository.getSingleByParent(factorId, milestoneId);
 };
 
 const update = function(factorId, factor) {
 	return factorRepository.update(factorId, factor);
 };
 
-const remove = function(factorId, milestoneId, goalId) {
-	return factorRepository.remove(factorId, milestoneId, goalId);
+const remove = function(factorId) {
+	return factorRepository.remove(factorId);
 };
 
-const checkIfExists = function(factorId, milestoneId, goalId) {
-	return factorRepository.checkIfExists(factorId, milestoneId, goalId);
+const checkIfExists = function(factorId) {
+	return factorRepository.checkIfExists(factorId);
 };
 
 const factorService = {
 	create,
+	getAll,
 	getAllByParent,
 	getSingleByParent,
 	update,

@@ -122,7 +122,7 @@ paths:
             produces: [application/json]
             parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
             responses: {'204': {description: 'Milestone deleted'}}
-    /goals/{goalId}/milestones/{milestoneId}/factors:
+    /milestones/{milestoneId}/factors:
         post:
             tags: [factors]
             summary: 'Create a factor'
@@ -130,7 +130,7 @@ paths:
             operationId: addfactor
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}, {in: body, name: body, description: 'New factor object', required: true, schema: {$ref: '#/definitions/Factor'}}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}, {in: body, name: body, description: 'New factor object', required: true, schema: {$ref: '#/definitions/Factor'}}]
             responses: {'201': {description: 'Factor created', schema: {$ref: '#/definitions/Factor'}}, '400': {description: 'Invalid input'}}
         get:
             tags: [factors]
@@ -139,17 +139,27 @@ paths:
             operationId: getallfactorsbymilestone
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
-    /goals/{goalId}/milestones/{milestoneId}/factors/{id}:
+    /milestones/{milestoneId}/factors/{factorId}:
         get:
             tags: [factors]
             summary: 'Find a factor by id'
             description: ''
             operationId: getfactorbyid
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Factor'}}, '404': {description: 'Factor not found'}}
+    /factors:
+        get:
+            tags: [factors]
+            summary: 'Get all factors'
+            description: ""
+            operationId: getallfactors
+            consumes: [application/json]
+            produces: [application/json]
+            responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
+    /factors/{factorId}:
         put:
             tags: [factors]
             summary: 'Update a factor'
@@ -157,7 +167,7 @@ paths:
             operationId: updatefactor
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing factor id', required: true, type: string, format: string}, {in: body, name: body, description: 'Factor object with updated fields', required: true, schema: {$ref: '#/definitions/Factor'}}]
+            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}, {in: body, name: body, description: 'Factor object with updated fields', required: true, schema: {$ref: '#/definitions/Factor'}}]
             responses: {'204': {description: 'Factor updated'}, '400': {description: 'Invalid input'}}
         delete:
             tags: [factors]
@@ -165,7 +175,7 @@ paths:
             description: ""
             operationId: deletefactor
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
+            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
             responses: {'204': {description: 'Factor deleted'}}
     /goals/{goalId}/milestones/{milestoneId}/factors/{factorId}/contributors:
         post:

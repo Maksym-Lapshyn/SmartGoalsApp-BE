@@ -50,7 +50,7 @@ const remove = function(milestoneId) {
 };
 
 const checkIfExists = function (milestoneId) {
-	return models.Goal.count({
+	return models.Milestone.count({
 		where: {
 			id: milestoneId
 		}

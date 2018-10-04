@@ -20,8 +20,8 @@ const remove = function(milestoneId, goalId) {
 	return milestoneRepository.remove(milestoneId, goalId);
 };
 
-const checkIfExists = function(milestoneId, goalId) {
-	return milestoneRepository.checkIfExists(milestoneId, goalId);
+const checkIfExists = function(milestoneId) {
+	return milestoneRepository.checkIfExists(milestoneId);
 };
 
 const milestoneService = {

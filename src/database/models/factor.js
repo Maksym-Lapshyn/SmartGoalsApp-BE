@@ -31,6 +31,7 @@ const factor = (sequelize, Sequelize) => {
 		milestoneId: {
 			type: Sequelize.INTEGER,
 			allowNull: true,
+			field: 'milestone_id',
 			references: {
 				model: 'milestones',
 				key: 'id'

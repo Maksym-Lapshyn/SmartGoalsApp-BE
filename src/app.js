@@ -33,8 +33,8 @@ app.use(validator());
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use('/api/goals', goalRoute);
 app.use('/api/milestones', milestoneRoute);
-app.use('/api/goals/:goalId/milestones/:milestoneId/factors', factorRoute);
-app.use('/api/goals/:goalId/milestones/:milestoneId/factors/:factorId/contributors', contributorRoute);
+app.use('/api/factors', factorRoute);
+app.use('/api/contributors', contributorRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
