@@ -50,14 +50,14 @@ paths:
             consumes: [application/json]
             produces: [application/json]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Goal'}}}}
-    /goals/{id}:
+    /goals/{goalId}:
         get:
             tags: [goals]
             summary: 'Find a goal by id'
             description: 'Returns a single goal'
             operationId: getgoalbyid
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Existing goal id', required: true, type: string, format: string}]
+            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Goal'}}, '404': {description: 'Goal not found'}}
         put:
             tags: [goals]
@@ -66,7 +66,7 @@ paths:
             operationId: updategoal
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {in: body, name: body, description: 'Goal object with updated fields', required: true, schema: {$ref: '#/definitions/Goal'}}]
+            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}, {in: body, name: body, description: 'Goal object with updated fields', required: true, schema: {$ref: '#/definitions/Goal'}}]
             responses: {'204': {description: 'Goal updated'}, '400': {description: 'Invalid input'}}
         delete:
             tags: [goals]
@@ -74,7 +74,7 @@ paths:
             description: ""
             operationId: deletegoal
             produces: [application/json]
-            parameters: [{name: id, in: path, description: 'Goal id', required: true, type: string, format: string}]
+            parameters: [{name: goalId, in: path, description: 'Goal id', required: true, type: number}]
             responses: {'204': {description: 'Goal deleted'}}
     /goals/{goalId}/milestones:
         post:
@@ -84,7 +84,7 @@ paths:
             operationId: addmilestone
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {in: body, name: body, description: 'New milestone object', required: true, schema: {$ref: '#/definitions/Milestone'}}]
+            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}, {in: body, name: body, description: 'New milestone object', required: true, schema: {$ref: '#/definitions/Milestone'}}]
             responses: {'201': {description: 'Milestone created', schema: {$ref: '#/definitions/Milestone'}}, '400': {description: 'Invalid input'}}
         get:
             tags: [milestones]
@@ -93,17 +93,18 @@ paths:
             operationId: getallmilestonesbygoal
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}]
+            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Milestone'}}}}
-    /goals/{goalId}/milestones/{id}:
+    /goals/{goalId}/milestones/{milestoneId}:
         get:
             tags: [milestones]
             summary: 'Find a milestone by id'
             description: ''
             operationId: getmilestonebyid
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing milestone id', required: true, type: string, format: string}]
+            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: number}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Milestone'}}, '404': {description: 'Milestone not found'}}
+    /milestones/{milestoneId}:
         put:
             tags: [milestones]
             summary: 'Update a milestone'
@@ -111,7 +112,7 @@ paths:
             operationId: updatedmilestone
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {in: body, name: body, description: 'Milestone object with updated fields', required: true, schema: {$ref: '#/definitions/Milestone'}}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}, {in: body, name: body, description: 'Milestone object with updated fields', required: true, schema: {$ref: '#/definitions/Milestone'}}]
             responses: {'204': {description: 'Milestone updated'}, '400': {description: 'Invalid input'}}
         delete:
             tags: [milestones]
@@ -119,7 +120,7 @@ paths:
             description: ''
             operationId: deletemilestone
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing milestone id', required: true, type: string, format: string}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
             responses: {'204': {description: 'Milestone deleted'}}
     /goals/{goalId}/milestones/{milestoneId}/factors:
         post:
@@ -129,7 +130,7 @@ paths:
             operationId: addfactor
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {in: body, name: body, description: 'New factor object', required: true, schema: {$ref: '#/definitions/Factor'}}]
+            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}, {in: body, name: body, description: 'New factor object', required: true, schema: {$ref: '#/definitions/Factor'}}]
             responses: {'201': {description: 'Factor created', schema: {$ref: '#/definitions/Factor'}}, '400': {description: 'Invalid input'}}
         get:
             tags: [factors]
@@ -215,7 +216,7 @@ definitions:
     Goal:
         type: object
         properties:
-            _id: {type: string, format: string, readOnly: true}
+            id: {type: number, readOnly: true}
             name: {type: string, format: string}
             description: {type: string, format: string}
             startDate: {type: string, format: date-time}
@@ -225,17 +226,19 @@ definitions:
     Milestone:
         type: object
         properties:
-            _id: {type: string, format: string, readOnly: true}
+            id: {type: number, readOnly: true}
+            goalId: {type: number, readOnly: true}
             name: {type: string, format: string}
             description: {type: string, format: string}
             plannedDate: {type: string, format: date-time}
             actualDate: {type: string, format: date-time}
-            value: {type: number, minimum: 1, maximum: 10, readOnly: true}
+            value: {type: number, minimum: 1, maximum: 10}
             factors: {type: array, readOnly: true, items: {$ref: '#/definitions/Factor'}}
     Factor:
         type: object
         properties:
-            _id: {type: string, format: string, readOnly: true}
+            id: {type: number, readOnly: true}
+            milestoneId: {type: number, readOnly: true}
             name: {type: string, format: string}
             description: {type: string, format: string}
             value: {type: number, minimum: 0, maximum: 10}
@@ -244,7 +247,8 @@ definitions:
     Contributor:
         type: object
         properties:
-            _id: {type: string, format: string, readOnly: true}
+            id: {type: number, readOnly: true}
+            factor: {type: number, readOnly: true}
             name: {type: string, format: string}
             description: {type: string, format: string}
 externalDocs:

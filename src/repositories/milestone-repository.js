@@ -1,62 +1,61 @@
-import mongoose from 'mongoose';
-import { goalRepository } from './goal-repository';
-import { mileStoneSchema } from '../schemas/milestone-schema';
-
-const Milestone = mongoose.model('Milestone', mileStoneSchema);
+import models from '../database/index';
 
 const create = function (goalId, milestone) {
-	return goalRepository.getSingle(goalId).then(goal => {
-		return Milestone.create(milestone).then(newMilestone => {
-			goal.milestones.push(newMilestone._id);
+	milestone.id = null;
+	milestone.goalId = goalId;
 
-			return goalRepository.update(goalId, goal).then(() => {
-				return newMilestone;
-			});
-		});
-	});
+	return models.Milestone.create(milestone);
 };
 
 const getAllByParent = function (goalId) {
-	return goalRepository.getSingle(goalId).then(goal => {
-		return goal.milestones;
+	return models.Milestone.findAll({
+		where: {
+			goalId: goalId
+		}
 	});
 };
 
 const getSingleByParent = function (milestoneId, goalId) {
-	return goalRepository.getSingle(goalId).then(goal => {
-		return goal.milestones.find(function(element) {
-			return element._id.toString() === milestoneId.toString();
-		});
+	return models.Milestone.find({
+		where: {
+			goalId: goalId,
+			id: milestoneId
+		}
 	});
 };
 
 const update = function(milestoneId, milestone) {
-	return Milestone.findById(milestoneId).then(existingMilestone => {
-		existingMilestone = Object.assign(existingMilestone, milestone);
-
-		return existingMilestone.save();
+	return models.Milestone.update({
+		name: milestone.name,
+		description: milestone.description,
+		plannedDate: milestone.plannedDate,
+		actualDate: milestone.actualDate,
+		value: milestone.value,
+	}, {
+		where: {
+			id: milestoneId
+		},
+		returning: true
+	}).then(([rowsUpdated, [updatedMilestone]]) => { // eslint-disable-line no-unused-vars
+		return updatedMilestone;
 	});
 };
 
-const remove = function(milestoneId, goalId) {
-	return goalRepository.getSingle(goalId).then(goal => {
-		goal.milestones.pull(milestoneId);
-
-		return goalRepository.update(goalId, goal);
-	}).then(() => {
-		return Milestone.findByIdAndRemove(milestoneId);
-	});
-};
-
-const checkIfExists = function (milestoneId, goalId) {
-	return goalRepository.checkIfExists(goalId).then(goalExists => {
-		if (!goalExists) {
-			return false;
-		} else {
-			return Milestone.find({_id: milestoneId}).then(milestones => {
-				return milestones && milestones.length > 0;
-			});
+const remove = function(milestoneId) {
+	return models.Milestone.destroy({
+		where: {
+			id: milestoneId
 		}
+	});
+};
+
+const checkIfExists = function (milestoneId) {
+	return models.Goal.count({
+		where: {
+			id: milestoneId
+		}
+	}).then(count => {
+		return count !== 0;
 	});
 };
 

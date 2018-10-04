@@ -5,10 +5,10 @@ const envConfig = config[process.env.NODE_ENV || 'development'];// eslint-disabl
 const sequelize = new Sequelize(envConfig.database, envConfig.username, envConfig.password, envConfig);
 
 const models = {
-	goal: sequelize.import('./models/goal'),
-	milestone: sequelize.import('./models/milestone'),
-	factor: sequelize.import('./models/factor'),
-	contributor: sequelize.import('./models/contributor')
+	Goal: sequelize.import('./models/goal'),
+	Milestone: sequelize.import('./models/milestone'),
+	Factor: sequelize.import('./models/factor'),
+	Contributor: sequelize.import('./models/contributor')
 };
 
 Object.keys(models).forEach(modelName => {
@@ -17,10 +17,7 @@ Object.keys(models).forEach(modelName => {
 	}
 });
 
-const connectToDatabase = async function(){
-	await sequelize.sync();
-};
+models.sequelize = sequelize;
+models.Sequelize = Sequelize;
 
-export {
-	connectToDatabase
-};
+export default models;

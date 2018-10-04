@@ -2,7 +2,7 @@ import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import { connectToDatabase } from './database/connection';
+//import { connectToDatabase } from './database/connection';
 import goalRoute from './routes/goal-route';
 import milestoneRoute from './routes/milestone-route';
 import factorRoute from './routes/factor-route';
@@ -14,7 +14,7 @@ import fs from 'fs';
 import validator from 'express-validator';
 
 // establish connection with the database
-connectToDatabase();
+//connectToDatabase();
 
 const app = express();
 const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
@@ -32,7 +32,7 @@ app.use(validator());
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 app.use('/api/goals', goalRoute);
-app.use('/api/goals/:goalId/milestones', milestoneRoute);
+app.use('/api/milestones', milestoneRoute);
 app.use('/api/goals/:goalId/milestones/:milestoneId/factors', factorRoute);
 app.use('/api/goals/:goalId/milestones/:milestoneId/factors/:factorId/contributors', contributorRoute);
 

@@ -12,7 +12,7 @@ CREATE TABLE goals (
 );
 
 CREATE TABLE milestones (
-    id SERIAL primary key,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description TEXT NULL,
     planned_date TIMESTAMP NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE milestones (
 );
 
 CREATE TABLE factors (
-    id SERIAL primary key,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description TEXT NULL,
 	value INTEGER NOT NULL CHECK(value >= 0 AND value <= 10),
@@ -31,7 +31,7 @@ CREATE TABLE factors (
 );
 
 CREATE TABLE contributors (
-    id SERIAL primary key,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     description TEXT NULL,
 	factor_id INTEGER REFERENCES factors(id) ON DELETE SET NULL

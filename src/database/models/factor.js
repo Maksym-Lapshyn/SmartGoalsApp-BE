@@ -1,5 +1,5 @@
 const factor = (sequelize, Sequelize) => {
-	const Factor = sequelize.define('goal', {
+	const Factor = sequelize.define('factor', {
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true
@@ -37,17 +37,18 @@ const factor = (sequelize, Sequelize) => {
 			}
 		}
 	}, {
-		tableName: 'factors'
+		tableName: 'factors',
+		timestamps: false
 	});
 
 	Factor.associate = (models) => {
-		Factor.belongsTo(models.milestone, {
-			foreignKey: 'id',
+		Factor.belongsTo(models.Milestone, {
+			foreignKey: 'milestoneId',
 			onDelete: 'SET NULL'
 		});
 
-		Factor.hasMany(models.contributor, {
-			foreignKey: 'id',
+		Factor.hasMany(models.Contributor, {
+			foreignKey: 'factorId',
 			as: 'contributors',
 		});
 	};

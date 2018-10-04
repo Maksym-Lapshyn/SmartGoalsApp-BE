@@ -1,5 +1,5 @@
 const contributor = (sequelize, Sequelize) => {
-	const Contributor = sequelize.define('goal', {
+	const Contributor = sequelize.define('contributor', {
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true
@@ -17,11 +17,12 @@ const contributor = (sequelize, Sequelize) => {
 			}
 		}
 	}, {
-		tableName: 'contributors'
+		tableName: 'contributors',
+		timestamps: false
 	});
 
 	Contributor.associate = (models) => {
-		Contributor.belongsTo(models.factor, {
+		Contributor.belongsTo(models.Factor, {
 			foreignKey: 'id',
 			onDelete: 'CASCADE'
 		});

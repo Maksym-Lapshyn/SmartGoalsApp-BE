@@ -1,5 +1,5 @@
 const milestone = (sequelize, Sequelize) => {
-	const Milestone = sequelize.define('goal', {
+	const Milestone = sequelize.define('milestone', {
 		id: {
 			type: Sequelize.INTEGER,
 			primaryKey: true
@@ -14,11 +14,13 @@ const milestone = (sequelize, Sequelize) => {
 		},
 		plannedDate: {
 			type: Sequelize.DATE,
-			allowNull: false
+			allowNull: false,
+			field: 'planned_date'
 		},
 		actualDate: {
 			type: Sequelize.DATE,
-			allowNull: true
+			allowNull: true,
+			field: 'actual_date'
 		},
 		value: {
 			type: Sequelize.INTEGER,
@@ -31,23 +33,25 @@ const milestone = (sequelize, Sequelize) => {
 		goalId: {
 			type: Sequelize.INTEGER,
 			allowNull: false,
+			field: 'goal_id',
 			references: {
 				model: 'goals',
 				key: 'id'
 			}
 		}
 	}, {
-		tableName: 'milestones'
+		tableName: 'milestones',
+		timestamps: false
 	});
 
 	Milestone.associate = (models) => {
-		Milestone.belongsTo(models.goal, {
+		Milestone.belongsTo(models.Goal, {
 			foreignKey: 'goalId',
 			onDelete: 'CASCADE'
 		});
 
-		Milestone.hasMany(models.factor, {
-			foreignKey: 'id',
+		Milestone.hasMany(models.Factor, {
+			foreignKey: 'milestoneId',
 			as: 'factors',
 		});
 	};

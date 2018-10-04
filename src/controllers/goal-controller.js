@@ -74,16 +74,14 @@ const update = function (req, res, next) {
 		const goalId = req.params.goalId;
 		const goal = req.body;
 
-		goalService.checkIfExists(goalId).then(goalExists => {
-			if (!goalExists) {
+		return goalService.update(goalId, goal).then(updatedGoal => {
+			if (!updatedGoal) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				return goalService.update(goalId, goal).then(() => {
-					res.status(204);
-					res.end();
-				});
+				res.status(204);
+				res.end();
 			}
 		}).catch(err => {
 			next(err);
@@ -103,16 +101,14 @@ const remove = function (req, res, next) {
 	} else {
 		const goalId = req.params.goalId;
 
-		goalService.checkIfExists(goalId).then(goalExists => {
-			if (!goalExists) {
+		goalService.remove(goalId).then(removedGoal => {
+			if (!removedGoal) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				return goalService.remove(goalId).then(() => {
-					res.status(204);
-					res.end();
-				});
+				res.status(204);
+				res.end();
 			}
 		}).catch(err => {
 			next(err);
@@ -121,7 +117,7 @@ const remove = function (req, res, next) {
 };
 
 const validateParams = function(req) {
-	req.checkParams('goalId', 'Goal id should be a valid identifier.').isMongoId();
+	req.checkParams('goalId', 'Goal id should be a positive integer.').isInt({min: 1});
 };
 
 const validateBody = function(req) {

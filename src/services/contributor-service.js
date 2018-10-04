@@ -1,4 +1,4 @@
-import { contributorRepository } from '../repositories/contributor-repository';
+import { contributorRepository } from '../repositories-old/contributor-repository';
 
 const create = function (factorId, milestoneId, goalId, contributor) {
 	return contributorRepository.create(factorId, milestoneId, goalId, contributor);

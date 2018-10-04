@@ -14,19 +14,22 @@ const goal = (sequelize, DataTypes) => {
 		},
 		startDate: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: false,
+			field: 'start_date'
 		},
 		endDate: {
 			type: DataTypes.DATE,
-			allowNull: false
+			allowNull: false,
+			field: 'end_date'
 		}
 	}, {
-		tableName: 'goals'
+		tableName: 'goals',
+		timestamps: false
 	});
 
 	Goal.associate = (models) => {
-		Goal.hasMany(models.milestone, {
-			foreignKey: 'id',
+		Goal.hasMany(models.Milestone, {
+			foreignKey: 'goalId',
 			as: 'milestones',
 		});
 	};

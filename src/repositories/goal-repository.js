@@ -1,60 +1,58 @@
-import mongoose from 'mongoose';
-import { goalSchema } from '../schemas/goal-schema';
-import { mileStoneSchema } from '../schemas/milestone-schema';
-import { factorSchema } from '../schemas/factor-schema';
-
-mongoose.model('Factor', factorSchema);
-
-const Milestone = mongoose.model('Milestone', mileStoneSchema);
-const Goal = mongoose.model('Goal', goalSchema);
+import models from '../database/index';
 
 const create = function (goal) {
-	return Goal.create(goal);
+	goal.id = null;
+
+	return models.Goal.create(goal);
 };
 
 const getAll = function () {
-	return Goal.find().populate({
-		path: 'milestones',
-		populate: {
-			path: 'factors'
-		}
-	});
+	return models.Goal.findAll();
 };
 
 const getSingle = function (goalId) {
-	return Goal.findById(goalId).populate({
-		path: 'milestones',
-		model: 'Milestone',
-		populate: {
-			path: 'factors',
-			model: 'Factor'
-		}
+	return models.Goal.find({
+		where: {
+			id: goalId
+		},
+		include: [{
+			model: models.Milestone,
+			as: 'milestones'
+		}]
 	});
 };
 
-const update = function(goalId, goal) {
-	return Goal.findById(goalId).then(existingGoal => {
-		existingGoal = Object.assign(existingGoal, goal);
-
-		return existingGoal.save();
+const update = function (goalId, goal) {
+	return models.Goal.update({
+		name: goal.name,
+		description: goal.description,
+		startDate: goal.startDate,
+		endDate: goal.endDate
+	}, {
+		where: {
+			id: goalId
+		},
+		returning: true
+	}).then(([rowsUpdated, [updatedGoal]]) => { // eslint-disable-line no-unused-vars
+		return updatedGoal;
 	});
 };
 
 const remove = function (goalId) {
-	return Goal.findById(goalId).then(goal => {
-		return Milestone.deleteMany({
-			_id: {
-				$in: goal.milestones
-			}
-		}).then(() => {
-			return Goal.findByIdAndRemove(goalId);
-		});
+	return models.Goal.destroy({
+		where: {
+			id: goalId
+		}
 	});
 };
 
-const checkIfExists = function (id) {
-	return Goal.find({_id: id}).then(goals => {
-		return goals && goals.length > 0;
+const checkIfExists = function (goalId) {
+	return models.Goal.count({
+		where: {
+			id: goalId
+		}
+	}).then(count => {
+		return count !== 0;
 	});
 };
 
