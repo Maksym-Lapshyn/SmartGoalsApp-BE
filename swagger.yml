@@ -138,7 +138,7 @@ paths:
             operationId: getallfactorsbymilestone
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
     /factors:
         get:
@@ -156,7 +156,7 @@ paths:
             description: ''
             operationId: getfactorbyid
             produces: [application/json]
-            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
+            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Factor'}}, '404': {description: 'Factor not found'}}
         put:
             tags: [factors]
@@ -175,7 +175,7 @@ paths:
             produces: [application/json]
             parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
             responses: {'204': {description: 'Factor deleted'}}
-    /goals/{goalId}/milestones/{milestoneId}/factors/{factorId}/contributors:
+    /factors/{factorId}/contributors:
         post:
             tags: [contributors]
             summary: 'Create a contributor'
@@ -183,7 +183,7 @@ paths:
             operationId: addcontributor
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}, {in: body, name: body, description: 'New contributor object', required: true, schema: {$ref: '#/definitions/Contributor'}}]
+            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}, {in: body, name: body, description: 'New contributor object', required: true, schema: {$ref: '#/definitions/Contributor'}}]
             responses: {'201': {description: 'Contributor created', schema: {$ref: '#/definitions/Contributor'}}, '400': {description: 'Invalid input'}}
         get:
             tags: [contributors]
@@ -192,16 +192,25 @@ paths:
             operationId: getallcontributorsbyfactor
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}]
+            parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Contributor'}}}}
-    /goals/{goalId}/milestones/{milestoneId}/factors/{factorId}/contributors/{id}:
+    /contributors:
+        get:
+            tags: [contributors]
+            summary: 'Get all contributors'
+            description: ""
+            operationId: getallcontributors
+            consumes: [application/json]
+            produces: [application/json]
+            responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
+    /contributors/{contributorId}:
         get:
             tags: [contributors]
             summary: 'Find a contributor by id'
             description: ''
             operationId: getcontributorbyid
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing contributor id', required: true, type: string, format: string}]
+            parameters: [{name: contributorId, in: path, description: 'Existing contributor id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {$ref: '#/definitions/Contributor'}}, '404': {description: 'Contributor not found'}}
         put:
             tags: [contributors]
@@ -210,7 +219,7 @@ paths:
             operationId: updatecontributor
             consumes: [application/json]
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing contributor id', required: true, type: string, format: string}, {in: body, name: body, description: 'Contributor object with updated fields', required: true, schema: {$ref: '#/definitions/Contributor'}}]
+            parameters: [{name: contributorId, in: path, description: 'Existing contributor id', required: true, type: number}, {in: body, name: body, description: 'Contributor object with updated fields', required: true, schema: {$ref: '#/definitions/Contributor'}}]
             responses: {'204': {description: 'Contributor updated'}, '400': {description: 'Invalid input'}}
         delete:
             tags: [contributors]
@@ -218,7 +227,7 @@ paths:
             description: ""
             operationId: deletecontributor
             produces: [application/json]
-            parameters: [{name: goalId, in: path, description: 'Existing goal id', required: true, type: string, format: string}, {name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: string, format: string}, {name: factorId, in: path, description: 'Existing factor id', required: true, type: string, format: string}, {name: id, in: path, description: 'Existing contributor id', required: true, type: string, format: string}]
+            parameters: [{name: contributorId, in: path, description: 'Existing contributor id', required: true, type: number}]
             responses: {'204': {description: 'Factor deleted'}}
 definitions:
     Goal:

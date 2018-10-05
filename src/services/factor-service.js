@@ -13,7 +13,7 @@ const getAllByParent = function (milestoneId) {
 };
 
 const getSingle = function (factorId) {
-	return factorRepository.getSingleByParent(factorId);
+	return factorRepository.getSingle(factorId);
 };
 
 const update = function(factorId, factor) {

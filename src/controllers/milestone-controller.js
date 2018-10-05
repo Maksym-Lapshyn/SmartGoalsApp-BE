@@ -65,7 +65,7 @@ const getAllByParent = function (req, res, next) {
 
 const getSingle = function (req, res, next) {
 	logRequest(req);
-	validateGoalId(req);
+	validateMilestoneId(req);
 
 	var validationErrors = req.validationErrors();
 

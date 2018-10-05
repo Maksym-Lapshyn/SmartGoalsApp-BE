@@ -11,6 +11,7 @@ const contributor = (sequelize, Sequelize) => {
 		factorId: {
 			type: Sequelize.INTEGER,
 			allowNull: true,
+			field: 'factor_id',
 			references: {
 				model: 'factors',
 				key: 'id'
@@ -23,8 +24,8 @@ const contributor = (sequelize, Sequelize) => {
 
 	Contributor.associate = (models) => {
 		Contributor.belongsTo(models.Factor, {
-			foreignKey: 'id',
-			onDelete: 'CASCADE'
+			foreignKey: 'factorId',
+			onDelete: 'SET NULL'
 		});
 	};
 

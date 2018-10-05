@@ -1,33 +1,38 @@
-import { contributorRepository } from '../repositories-old/contributor-repository';
+import { contributorRepository } from '../repositories/contributor-repository';
 
-const create = function (factorId, milestoneId, goalId, contributor) {
-	return contributorRepository.create(factorId, milestoneId, goalId, contributor);
+const create = function (factorId, contributor) {
+	return contributorRepository.create(factorId, contributor);
 };
 
-const getAllByParent = function (factorId, milestoneId, goalId) {
-	return contributorRepository.getAllByParent(factorId, milestoneId, goalId);
+const getAll = function() {
+	return contributorRepository.getAll();
 };
 
-const getSingleByParent = function (contributorId, factorId, milestoneId, goalId) {
-	return contributorRepository.getSingleByParent(contributorId, factorId, milestoneId, goalId);
+const getAllByParent = function (factorId) {
+	return contributorRepository.getAllByParent(factorId);
+};
+
+const getSingle = function (contributorId) {
+	return contributorRepository.getSingle(contributorId);
 };
 
 const update = function(contributorId, contributor) {
 	return contributorRepository.update(contributorId, contributor);
 };
 
-const remove = function(contributorId, factorId, milestoneId, goalId) {
-	return contributorRepository.remove(contributorId, factorId, milestoneId, goalId);
+const remove = function(contributorId) {
+	return contributorRepository.remove(contributorId);
 };
 
-const checkIfExists = function(contributorId, factorId, milestoneId, goalId) {
-	return contributorRepository.checkIfExists(contributorId, factorId, milestoneId, goalId);
+const checkIfExists = function(contributorId) {
+	return contributorRepository.checkIfExists(contributorId);
 };
 
 const contributorService = {
 	create,
+	getAll,
 	getAllByParent,
-	getSingleByParent,
+	getSingle,
 	update,
 	remove,
 	checkIfExists

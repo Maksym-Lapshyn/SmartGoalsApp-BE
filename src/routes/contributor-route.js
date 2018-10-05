@@ -1,15 +1,10 @@
 import { Router } from 'express';
 import { contributorController } from '../controllers/contributor-controller';
 
-const routerOptions = {
-	mergeParams: true
-};
+const router = Router();
 
-const router = Router(routerOptions);
-
-router.post('/', contributorController.create);
-router.get('/', contributorController.getAllByParent);
-router.get('/:contributorId', contributorController.getSingleByParent);
+router.get('/', contributorController.getAll);
+router.get('/:contributorId', contributorController.getSingle);
 router.put('/:contributorId', contributorController.update);
 router.delete('/:contributorId', contributorController.remove);
 

@@ -9,7 +9,7 @@ const getAllByParent = function (goalId) {
 };
 
 const getSingle = function (milestoneId) {
-	return milestoneRepository.getSingleByParent(milestoneId);
+	return milestoneRepository.getSingle(milestoneId);
 };
 
 const update = function(milestoneId, milestone) {
