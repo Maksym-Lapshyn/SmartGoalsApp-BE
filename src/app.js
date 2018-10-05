@@ -2,7 +2,6 @@ import createError from 'http-errors';
 import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-//import { connectToDatabase } from './database/connection';
 import goalRoute from './routes/goal-route';
 import milestoneRoute from './routes/milestone-route';
 import factorRoute from './routes/factor-route';
@@ -12,9 +11,6 @@ import yaml from 'js-yaml';
 import { logError } from './logger';
 import fs from 'fs';
 import validator from 'express-validator';
-
-// establish connection with the database
-//connectToDatabase();
 
 const app = express();
 const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
