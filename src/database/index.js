@@ -2,7 +2,10 @@ import Sequelize from 'sequelize';
 import config from './config';
 
 const envConfig = config[process.env.NODE_ENV || 'development'];// eslint-disable-line no-undef
-const sequelize = new Sequelize(envConfig.database, envConfig.username, envConfig.password, envConfig);
+
+const sequelize = process.env.NODE_ENV === 'production'// eslint-disable-line no-undef
+	? new Sequelize(process.env.PG_URI, envConfig)// eslint-disable-line no-undef
+	: new Sequelize(envConfig.database, envConfig.username, envConfig.password, envConfig);
 
 const models = {
 	Goal: sequelize.import('../models/goal'),
