@@ -19,4 +19,4 @@ jobs: # a collection of steps
             #- ./node_modules
       - run: # run build
           name: Build
-          command: npm run build
+          command: npm run serve
