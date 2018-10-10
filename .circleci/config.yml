@@ -19,19 +19,19 @@ jobs: # a collection of steps
             - ./node_modules
       - run: # run build
           name: Build
-		  command: npm run build
-	  - setup_remote_docker:
-		  docker_layer_caching: true
-	  - run:
-			name: Export Tag
-			command: |
-              echo 'export TAG=1.0.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
-	  - run:
-		  name: Push Docker Image
-		  command: |
-			  docker build -t $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG .
-			  echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-			  docker push $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG
+          command: npm run build
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Export Tag
+          command: |
+            echo 'export TAG=1.0.${CIRCLE_BUILD_NUM}' >> $BASH_ENV
+      - run:
+          name: Push Docker Image
+          command: |
+            docker build -t $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG .
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
+            docker push $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG
 		#- run:
 			#name: Deploy To Digital Ocean
 			#command: |
