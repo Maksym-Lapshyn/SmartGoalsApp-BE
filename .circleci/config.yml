@@ -32,3 +32,7 @@ jobs: # a collection of steps
             docker build -t $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG
+      - run:
+          name: Deploy To Digital Ocean
+          command: |
+            ssh -o StrictHostKeyChecking=no circle-ci@smartgoalsapp.ml "/bin/bash ./deploy_app.sh $DOCKER_REPO_NAME/$DOCKER_IMAGE_NAME:$TAG"
