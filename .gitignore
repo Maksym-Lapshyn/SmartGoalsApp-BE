@@ -62,3 +62,6 @@ typings/
 
 # Output folder
 dist/
+
+# Visual studio code
+.vscode
