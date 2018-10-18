@@ -27,15 +27,6 @@ const factor = (sequelize, Sequelize) => {
 				min: 0,
 				max: 10
 			}
-		},
-		milestoneId: {
-			type: Sequelize.INTEGER,
-			allowNull: true,
-			field: 'milestone_id',
-			references: {
-				model: 'milestones',
-				key: 'id'
-			}
 		}
 	}, {
 		tableName: 'factors',
@@ -43,14 +34,16 @@ const factor = (sequelize, Sequelize) => {
 	});
 
 	Factor.associate = (models) => {
-		Factor.belongsTo(models.Milestone, {
-			foreignKey: 'milestoneId',
-			onDelete: 'SET NULL'
+		Factor.belongsToMany(models.Milestone, {
+			through: 'milestones_factors',
+			foreignKey: 'factor_id',
+			as: 'milestones'
 		});
 
-		Factor.hasMany(models.Contributor, {
-			foreignKey: 'factorId',
-			as: 'contributors',
+		Factor.belongsToMany(models.Contributor, {
+			through: 'factors_contributors',
+			foreignKey: 'factor_id',
+			as: 'contributors'
 		});
 	};
 
