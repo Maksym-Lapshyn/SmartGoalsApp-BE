@@ -124,7 +124,7 @@ paths:
     /milestones/{milestoneId}/factors:
         post:
             tags: [factors]
-            summary: 'Create a factor'
+            summary: 'Create a factor and link it to milestone'
             description: ""
             operationId: addfactor
             consumes: [application/json]
@@ -140,6 +140,25 @@ paths:
             produces: [application/json]
             parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Factor'}}}}
+    /milestones/{milestoneId}/factors/{factorId}:
+        put:
+            tags: [factors]
+            summary: 'Link factor to a milestone'
+            description: ""
+            operationId: linkfactortomilestone
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number},{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
+            responses: {'204': {description: 'Factor linked'}}
+        delete:
+            tags: [factors]
+            summary: 'Unlink factor from a milestone'
+            description: ""
+            operationId: unlinkfactortomilestone
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: milestoneId, in: path, description: 'Existing milestone id', required: true, type: number},{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
+            responses: {'204': {description: 'Factor unlinked'}}
     /factors:
         get:
             tags: [factors]
@@ -178,7 +197,7 @@ paths:
     /factors/{factorId}/contributors:
         post:
             tags: [contributors]
-            summary: 'Create a contributor'
+            summary: 'Create a contributor and link it to factor'
             description: ""
             operationId: addcontributor
             consumes: [application/json]
@@ -194,6 +213,25 @@ paths:
             produces: [application/json]
             parameters: [{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
             responses: {'200': {description: 'Successful operation', schema: {type: array, items: {$ref: '#/definitions/Contributor'}}}}
+    /factors/{factorId}/contributors/{contributorId}:
+        put:
+            tags: [contributors]
+            summary: 'Link contributor to a factor'
+            description: ""
+            operationId: linkcontributortofactor
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: contributorId, in: path, description: 'Existing contributor id', required: true, type: number},{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
+            responses: {'204': {description: 'Contributor linked'}}
+        delete:
+            tags: [contributors]
+            summary: 'Unlink contributor from a factor'
+            description: ""
+            operationId: unlinkcontributorfromfactor
+            consumes: [application/json]
+            produces: [application/json]
+            parameters: [{name: contributorId, in: path, description: 'Existing contributor id', required: true, type: number},{name: factorId, in: path, description: 'Existing factor id', required: true, type: number}]
+            responses: {'204': {description: 'Contributor unlinked'}}
     /contributors:
         get:
             tags: [contributors]
@@ -255,7 +293,6 @@ definitions:
         type: object
         properties:
             id: {type: number, readOnly: true}
-            milestoneId: {type: number, readOnly: true}
             name: {type: string, format: string}
             description: {type: string, format: string}
             value: {type: number, minimum: 0, maximum: 10}
@@ -265,7 +302,6 @@ definitions:
         type: object
         properties:
             id: {type: number, readOnly: true}
-            factor: {type: number, readOnly: true}
             name: {type: string, format: string}
             description: {type: string, format: string}
 externalDocs:

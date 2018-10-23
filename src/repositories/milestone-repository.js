@@ -16,7 +16,7 @@ const getAllByParent = function (goalId) {
 };
 
 const getSingle = function (milestoneId) {
-	return models.Milestone.find({
+	return models.Milestone.findOne({
 		where: {
 			id: milestoneId
 		}

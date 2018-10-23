@@ -1,3 +1,5 @@
+import FactorContributor from './factor-contributor';
+
 const contributor = (sequelize, Sequelize) => {
 	const Contributor = sequelize.define('contributor', {
 		id: {
@@ -12,14 +14,6 @@ const contributor = (sequelize, Sequelize) => {
 		tableName: 'contributors',
 		timestamps: false
 	});
-
-	Contributor.associate = (models) => {
-		Contributor.belongsToMany(models.Factor, {
-			through: 'factors_contributors',
-			foreignKey: 'contributor_id',
-			as: 'factors'
-		});
-	};
 
 	return Contributor;
 };

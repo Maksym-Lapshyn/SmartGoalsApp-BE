@@ -49,12 +49,6 @@ const milestone = (sequelize, Sequelize) => {
 			foreignKey: 'goalId',
 			onDelete: 'CASCADE'
 		});
-
-		Milestone.belongsToMany(models.Factor, {
-			through: 'milestones_factors',
-			as: 'factors',
-			foreignKey: 'milestone_id'
-		});
 	};
 
 	return Milestone;

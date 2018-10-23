@@ -1,3 +1,6 @@
+import MilestoneFactor from './milestone-factor';
+import FactorContributor from './factor-contributor';
+
 const factor = (sequelize, Sequelize) => {
 	const Factor = sequelize.define('factor', {
 		id: {
@@ -32,20 +35,6 @@ const factor = (sequelize, Sequelize) => {
 		tableName: 'factors',
 		timestamps: false
 	});
-
-	Factor.associate = (models) => {
-		Factor.belongsToMany(models.Milestone, {
-			through: 'milestones_factors',
-			foreignKey: 'factor_id',
-			as: 'milestones'
-		});
-
-		Factor.belongsToMany(models.Contributor, {
-			through: 'factors_contributors',
-			foreignKey: 'factor_id',
-			as: 'contributors'
-		});
-	};
 
 	return Factor;
 };

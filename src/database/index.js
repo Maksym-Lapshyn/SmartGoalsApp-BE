@@ -11,7 +11,9 @@ const models = {
 	Goal: sequelize.import('../models/goal'),
 	Milestone: sequelize.import('../models/milestone'),
 	Factor: sequelize.import('../models/factor'),
-	Contributor: sequelize.import('../models/contributor')
+	Contributor: sequelize.import('../models/contributor'),
+	MilestoneFactor: sequelize.import('../models/milestone-factor'),
+	FactorContributor: sequelize.import('../models/factor-contributor')
 };
 
 Object.keys(models).forEach(modelName => {

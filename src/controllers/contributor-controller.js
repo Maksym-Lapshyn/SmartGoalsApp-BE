@@ -1,8 +1,8 @@
 import { logInfo } from '../logger';
-import { factorService } from '../services/factor-service';
-import { contributorService } from '../services/contributor-service';
+import { factorRepository } from '../repositories/factor-repository';
+import { contributorRepository } from '../repositories/contributor-repository';
 
-const create = function (req, res, next) {
+const addToParent = function (req, res, next) {
 	logRequest(req);
 	validateFactorId(req);
 	validateBody(req);
@@ -16,13 +16,13 @@ const create = function (req, res, next) {
 		const contributor = req.body;
 		const factorId = req.params.factorId;
 
-		factorService.checkIfExists(factorId).then(exists => {
+		factorRepository.checkIfExists(factorId).then(exists => {
 			if (!exists) {
 				res.status(404);
 				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
 				res.end();
 			} else {
-				return contributorService.create(factorId, contributor).then(newContributor => {
+				return contributorRepository.create(factorId, contributor).then(newContributor => {
 					res.status(201);
 					res.json(newContributor);
 					res.end();
@@ -37,7 +37,7 @@ const create = function (req, res, next) {
 const getAll = function (req, res, next) {
 	logRequest(req);
 
-	return contributorService.getAll().then(contributors => {
+	return contributorRepository.getAll().then(contributors => {
 		res.status(200);
 		res.json(contributors);
 	}).catch(err => {
@@ -57,13 +57,13 @@ const getAllByParent = function (req, res, next) {
 	} else {
 		const factorId = req.params.factorId;
 
-		factorService.checkIfExists(factorId).then(exists => {
-			if (!exists) {
+		factorRepository.getSingle(factorId).then(factor => {
+			if (!factor) {
 				res.status(404);
 				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
 				res.end();
 			} else {
-				return contributorService.getAllByParent(factorId).then(contributors => {
+				return contributorRepository.getAllByParent(factor).then(contributors => {
 					res.status(200);
 					res.json(contributors);
 				});
@@ -86,7 +86,7 @@ const getSingle = function (req, res, next) {
 	} else {
 		const contributorId = req.params.contributorId;
 
-		contributorService.getSingle(contributorId).then(contributor => {
+		contributorRepository.getSingle(contributorId).then(contributor => {
 			if (!contributor) {
 				res.status(404);
 				res.statusMessage = `Contributor with id: "${contributorId}" does not exist.`;
@@ -95,6 +95,52 @@ const getSingle = function (req, res, next) {
 				res.status(200);
 				res.json(contributor);
 			}
+		}).catch(err => {
+			next(err);
+		});
+	}
+};
+
+const linkToParent = function (req, res, next) {
+	logRequest(req);
+	validateContributorId(req);
+	validateFactorId(req);
+	
+	var validationErrors = req.validationErrors();
+
+	if (validationErrors) {
+		res.status(400);
+		res.json(validationErrors);
+	} else {
+		const contributorId = req.params.contributorId;
+		const factorId = req.params.factorId;
+
+		return contributorRepository.linkToParent(factorId, contributorId).then(() => {
+			res.status(204);
+			res.end();
+		}).catch(err => {
+			next(err);
+		});
+	}
+};
+
+const unlinkFromParent = function (req, res, next) {
+	logRequest(req);
+	validateContributorId(req);
+	validateFactorId(req);
+	
+	var validationErrors = req.validationErrors();
+
+	if (validationErrors) {
+		res.status(400);
+		res.json(validationErrors);
+	} else {
+		const contributorId = req.params.contributorId;
+		const factorId = req.params.factorId;
+
+		return contributorRepository.linkToParent(factorId, contributorId).then(() => {
+			res.status(204);
+			res.end();
 		}).catch(err => {
 			next(err);
 		});
@@ -115,7 +161,7 @@ const update = function (req, res, next) {
 		const contributorId = req.params.contributorId;
 		const contributor = req.body;
 
-		return contributorService.update(contributorId, contributor).then(udpatedContributor => {
+		return contributorRepository.update(contributorId, contributor).then(udpatedContributor => {
 			if (!udpatedContributor) {
 				res.status(404);
 				res.statusMessage = `Contributor with id: "${contributorId}" does not exist.`;
@@ -142,7 +188,7 @@ const remove = function (req, res, next) {
 	} else {
 		const contributorId = req.params.contributorId;
 
-		contributorService.remove(contributorId).then(removedContributor => {
+		contributorRepository.remove(contributorId).then(removedContributor => {
 			if (!removedContributor) {
 				res.status(404);
 				res.statusMessage = `Contributor with id: "${contributorId}" does not exist.`;
@@ -180,9 +226,11 @@ const logRequest = function(req) {
 };
 
 const contributorController = {
-	create,
+	addToParent,
 	getAll,
 	getAllByParent,
+	linkToParent,
+	unlinkFromParent,
 	getSingle,
 	update,
 	remove

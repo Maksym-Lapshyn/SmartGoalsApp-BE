@@ -1,26 +1,46 @@
 import models from '../database/index';
 
-const create = function (factorId, contributor) {
+const addToParent = function (factorId, contributor) {
 	contributor.id = null;
-	contributor.factorId = factorId;
 
-	return models.Contributor.create(contributor);
+	return models.Contributor.create(contributor).then(newContributor => {
+		return models.FactorContributor.create({
+			factorId: factorId,
+			contributorId: newContributor.Id
+		}).then(() => {
+			return newContributor;
+		});
+	});
 };
 
 const getAll = function () {
 	return models.Contributor.findAll();
 };
 
-const getAllByParent = function (factorId) {
-	return models.Contributor.findAll({
+const getAllByParent = function (factor) {
+	return factor.getContributors();
+};
+
+const linkToParent = function(factorId, contributorId) {
+	return models.FactorContributor.findCreateFind({
 		where: {
-			factorId: factorId
+			factorId: factorId,
+			contributorId: contributorId
+		}
+	});
+};
+
+const unlinkFromParent = function(factorId, contributorId) {
+	return models.FactorContributor.destroy({
+		where: {
+			factorId: factorId,
+			contributorId: contributorId
 		}
 	});
 };
 
 const getSingle = function (contributorId) {
-	return models.Contributor.find({
+	return models.Contributor.findOne({
 		where: {
 			id: contributorId
 		}
@@ -60,9 +80,11 @@ const checkIfExists = function (contributorId) {
 };
 
 const contributorRepository = {
-	create,
+	addToParent,
 	getAll,
 	getSingle,
+	linkToParent,
+	unlinkFromParent,
 	getAllByParent,
 	update,
 	remove,

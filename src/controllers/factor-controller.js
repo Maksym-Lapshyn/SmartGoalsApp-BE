@@ -1,6 +1,6 @@
 import { logInfo } from '../logger';
-import { factorService } from '../services/factor-service';
-import { milestoneService } from '../services/milestone-service';
+import { factorRepository } from '../repositories/factor-repository';
+import { milestoneRepository } from '../repositories/milestone-repository';
 
 const create = function (req, res, next) {
 	logRequest(req);
@@ -16,13 +16,13 @@ const create = function (req, res, next) {
 		const factor = req.body;
 		const milestoneId = req.params.milestoneId;
 
-		milestoneService.checkIfExists(milestoneId).then(exists => {
+		milestoneRepository.checkIfExists(milestoneId).then(exists => {
 			if (!exists) {
 				res.status(404);
 				res.statusMessage = `Milestone with id "${milestoneId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.create(milestoneId, factor).then(newFactor => {
+				return factorRepository.addToParent(milestoneId, factor).then(newFactor => {
 					res.status(201);
 					res.json(newFactor);
 					res.end();
@@ -37,7 +37,7 @@ const create = function (req, res, next) {
 const getAll = function (req, res, next) {
 	logRequest(req);
 
-	return factorService.getAll().then(factors => {
+	return factorRepository.getAll().then(factors => {
 		res.status(200);
 		res.json(factors);
 	}).catch(err => {
@@ -57,17 +57,63 @@ const getAllByParent = function (req, res, next) {
 	} else {
 		const milestoneId = req.params.milestoneId;
 
-		milestoneService.checkIfExists(milestoneId).then(exists => {
-			if (!exists) {
+		milestoneRepository.getSingle(milestoneId).then(milestone => {
+			if (!milestone) {
 				res.status(404);
 				res.statusMessage = `Milestone with id "${milestoneId}" does not exist.`;
 				res.end();
 			} else {
-				return factorService.getAllByParent(milestoneId).then(factors => {
+				return factorRepository.getAllByParent(milestone).then(factors => {
 					res.status(200);
 					res.json(factors);
 				});
 			}
+		}).catch(err => {
+			next(err);
+		});
+	}
+};
+
+const linkToParent = function (req, res, next) {
+	logRequest(req);
+	validateMilestoneId(req);
+	validateFactorId(req);
+	
+	var validationErrors = req.validationErrors();
+
+	if (validationErrors) {
+		res.status(400);
+		res.json(validationErrors);
+	} else {
+		const milestoneId = req.params.milestoneId;
+		const factorId = req.params.factorId;
+
+		factorRepository.linkToParent(milestoneId, factorId).then(() => {
+			res.status(204);
+			res.json();
+		}).catch(err => {
+			next(err);
+		});
+	}
+};
+
+const unlinkFromParent = function (req, res, next) {
+	logRequest(req);
+	validateMilestoneId(req);
+	validateFactorId(req);
+	
+	var validationErrors = req.validationErrors();
+
+	if (validationErrors) {
+		res.status(400);
+		res.json(validationErrors);
+	} else {
+		const milestoneId = req.params.milestoneId;
+		const factorId = req.params.factorId;
+
+		factorRepository.unlinkFromParent(milestoneId, factorId).then(() => {
+			res.status(204);
+			res.json();
 		}).catch(err => {
 			next(err);
 		});
@@ -86,7 +132,7 @@ const getSingle = function (req, res, next) {
 	} else {
 		const factorId = req.params.factorId;
 
-		factorService.getSingle(factorId).then(factor => {
+		factorRepository.getSingle(factorId).then(factor => {
 			if (!factor) {
 				res.status(404);
 				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
@@ -115,7 +161,7 @@ const update = function (req, res, next) {
 		const factorId = req.params.factorId;
 		const factor = req.body;
 
-		return factorService.update(factorId, factor).then(updatedFactor => {
+		return factorRepository.update(factorId, factor).then(updatedFactor => {
 			if (!updatedFactor) {
 				res.status(404);
 				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
@@ -142,7 +188,7 @@ const remove = function (req, res, next) {
 	} else {
 		const factorId = req.params.factorId;
 
-		return factorService.remove(factorId).then(removedFactor => {
+		return factorRepository.remove(factorId).then(removedFactor => {
 			if (!removedFactor) {
 				res.status(404);
 				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
@@ -185,6 +231,8 @@ const factorController = {
 	create,
 	getAll,
 	getAllByParent,
+	linkToParent,
+	unlinkFromParent,
 	getSingle,
 	update,
 	remove

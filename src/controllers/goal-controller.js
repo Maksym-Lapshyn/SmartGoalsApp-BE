@@ -1,5 +1,5 @@
 import { logInfo } from '../logger';
-import { goalService } from '../services/goal-service';
+import { goalRepository } from '../repositories/goal-repository';
 
 const create = function (req, res, next) {
 	logRequest(req);
@@ -13,7 +13,7 @@ const create = function (req, res, next) {
 	} else {
 		const goal = req.body;
 	
-		goalService.create(goal).then(newGoal => {
+		goalRepository.create(goal).then(newGoal => {
 			res.status(201);
 			res.json(newGoal);
 		}).catch(err => {
@@ -25,7 +25,7 @@ const create = function (req, res, next) {
 const getAll = function (req, res, next) {
 	logRequest(req);
 
-	goalService.getAll().then(goals => {
+	goalRepository.getAll().then(goals => {
 		res.status(200);
 		res.json(goals);
 	}).catch(err => {
@@ -45,7 +45,7 @@ const getSingle = function (req, res, next) {
 	} else {
 		const goalId = req.params.goalId;
 
-		goalService.getSingle(goalId).then(goal => {
+		goalRepository.getSingle(goalId).then(goal => {
 			if (!goal) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
@@ -74,7 +74,7 @@ const update = function (req, res, next) {
 		const goalId = req.params.goalId;
 		const goal = req.body;
 
-		return goalService.update(goalId, goal).then(updatedGoal => {
+		return goalRepository.update(goalId, goal).then(updatedGoal => {
 			if (!updatedGoal) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
@@ -101,7 +101,7 @@ const remove = function (req, res, next) {
 	} else {
 		const goalId = req.params.goalId;
 
-		goalService.remove(goalId).then(removedGoal => {
+		goalRepository.remove(goalId).then(removedGoal => {
 			if (!removedGoal) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;

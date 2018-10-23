@@ -11,7 +11,7 @@ const getAll = function () {
 };
 
 const getSingle = function (goalId) {
-	return models.Goal.find({
+	return models.Goal.findOne({
 		where: {
 			id: goalId
 		},

@@ -1,6 +1,6 @@
 import { logInfo } from '../logger';
-import { milestoneService } from '../services/milestone-service';
-import { goalService } from '../services/goal-service';
+import { milestoneRepository } from '../repositories/milestone-repository';
+import { goalRepository } from '../repositories/goal-repository';
 
 const create = function (req, res, next) {
 	logRequest(req);
@@ -16,13 +16,13 @@ const create = function (req, res, next) {
 		const milestone = req.body;
 		const goalId = req.params.goalId;
 
-		goalService.checkIfExists(goalId).then(exists => {
+		goalRepository.checkIfExists(goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				return milestoneService.create(goalId, milestone).then(newMilestone => {
+				return milestoneRepository.create(goalId, milestone).then(newMilestone => {
 					res.status(201);
 					res.json(newMilestone);
 					res.end();
@@ -46,13 +46,13 @@ const getAllByParent = function (req, res, next) {
 	} else {
 		const goalId = req.params.goalId;
 
-		goalService.checkIfExists(goalId).then(exists => {
+		goalRepository.checkIfExists(goalId).then(exists => {
 			if (!exists) {
 				res.status(404);
 				res.statusMessage = `Goal with id: "${goalId}" does not exist.`;
 				res.end();
 			} else {
-				return milestoneService.getAllByParent(goalId).then(milestones => {
+				return milestoneRepository.getAllByParent(goalId).then(milestones => {
 					res.status(200);
 					res.json(milestones);
 				});
@@ -75,7 +75,7 @@ const getSingle = function (req, res, next) {
 	} else {
 		const milestoneId = req.params.milestoneId;
 
-		milestoneService.getSingle(milestoneId).then((milestone) => {
+		milestoneRepository.getSingle(milestoneId).then((milestone) => {
 			if (!milestone) {
 				res.status(404);
 				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
@@ -104,7 +104,7 @@ const update = function (req, res, next) {
 		const milestoneId = req.params.milestoneId;
 		const milestone = req.body;
 	
-		milestoneService.update(milestoneId, milestone).then(updatedMilestone => {
+		milestoneRepository.update(milestoneId, milestone).then(updatedMilestone => {
 			if (!updatedMilestone) {
 				res.status(404);
 				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;
@@ -131,7 +131,7 @@ const remove = function (req, res, next) {
 	} else {
 		const milestoneId = req.params.milestoneId;
 	
-		milestoneService.remove(milestoneId).then(removedMilestone => {
+		milestoneRepository.remove(milestoneId).then(removedMilestone => {
 			if (!removedMilestone) {
 				res.status(404);
 				res.statusMessage = `Milestone with id: "${milestoneId}" does not exist.`;

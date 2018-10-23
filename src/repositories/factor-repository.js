@@ -1,26 +1,46 @@
 import models from '../database/index';
 
-const create = function (milestoneId, factor) {
+const addToParent = function (milestoneId, factor) {
 	factor.id = null;
-	factor.milestoneId = milestoneId;
 
-	return models.Factor.create(factor);
+	return models.Factor.create(factor).then(newFactor => {
+		return models.MilestoneFactor.create({
+			milestoneId: milestoneId,
+			factorId: newFactor.id
+		}).then(() => {
+			return newFactor;
+		});
+	});
 };
 
 const getAll = function () {
 	return models.Factor.findAll();
 };
 
-const getAllByParent = function (milestoneId) {
-	return models.Factor.findAll({
+const getAllByParent = function (milestone) {
+	return milestone.getFactors();
+};
+
+const linkToParent = function(milestoneId, factorId) {
+	return models.MilestoneFactor.findCreateFind({
 		where: {
-			milestoneId: milestoneId
+			milestoneId: milestoneId,
+			factorId: factorId
+		}
+	});
+};
+
+const unlinkFromParent = function(milestoneId, factorId) {
+	return models.MilestoneFactor.destroy({
+		where: {
+			milestoneId: milestoneId,
+			factorId: factorId
 		}
 	});
 };
 
 const getSingle = function (factorId) {
-	return models.Factor.find({
+	return models.Factor.findOne({
 		where: {
 			id: factorId
 		}
@@ -62,10 +82,12 @@ const checkIfExists = function (factorId) {
 };
 
 const factorRepository = {
-	create,
+	addToParent,
 	getAll,
 	getSingle,
 	getAllByParent,
+	linkToParent,
+	unlinkFromParent,
 	update,
 	remove,
 	checkIfExists
