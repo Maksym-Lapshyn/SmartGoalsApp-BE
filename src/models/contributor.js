@@ -1,5 +1,3 @@
-import FactorContributor from './factor-contributor';
-
 const contributor = (sequelize, Sequelize) => {
 	const Contributor = sequelize.define('contributor', {
 		id: {
@@ -9,6 +7,10 @@ const contributor = (sequelize, Sequelize) => {
 		name: {
 			type: Sequelize.STRING,
 			allowNull: false,
+		},
+		description: {
+			type: Sequelize.STRING,
+			allowNull: true
 		}
 	}, {
 		tableName: 'contributors',

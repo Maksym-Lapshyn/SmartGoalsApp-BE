@@ -276,7 +276,6 @@ definitions:
             description: {type: string, format: string}
             startDate: {type: string, format: date-time}
             endDate: {type: string, format: date-time}
-            tags: {type: array, items: {type: string}}
             milestones: {type: array, readOnly: true, items: {$ref: '#/definitions/Milestone'}}
     Milestone:
         type: object

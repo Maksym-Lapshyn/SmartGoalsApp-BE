@@ -19,7 +19,21 @@ const getSingle = function (milestoneId) {
 	return models.Milestone.findOne({
 		where: {
 			id: milestoneId
-		}
+		},
+		include: [{
+			model: models.Factor,
+			as: 'factors',
+			through: {
+				attributes: []
+			},
+			include: [{
+				model: models.Contributor,
+				as: 'contributors',
+				through: {
+					attributes: []
+				},
+			}]
+		}]
 	});
 };
 

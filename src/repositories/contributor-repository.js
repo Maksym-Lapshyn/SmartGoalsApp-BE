@@ -6,7 +6,7 @@ const addToParent = function (factorId, contributor) {
 	return models.Contributor.create(contributor).then(newContributor => {
 		return models.FactorContributor.create({
 			factorId: factorId,
-			contributorId: newContributor.Id
+			contributorId: newContributor.id
 		}).then(() => {
 			return newContributor;
 		});

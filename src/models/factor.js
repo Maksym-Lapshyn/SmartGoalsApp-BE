@@ -1,6 +1,3 @@
-import MilestoneFactor from './milestone-factor';
-import FactorContributor from './factor-contributor';
-
 const factor = (sequelize, Sequelize) => {
 	const Factor = sequelize.define('factor', {
 		id: {

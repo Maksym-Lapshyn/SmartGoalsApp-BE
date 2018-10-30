@@ -43,7 +43,14 @@ const getSingle = function (factorId) {
 	return models.Factor.findOne({
 		where: {
 			id: factorId
-		}
+		},
+		include: [{
+			model: models.Contributor,
+			as: 'contributors',
+			through: {
+				attributes: []
+			},
+		}]
 	});
 };
 

@@ -11,6 +11,7 @@ import yaml from 'js-yaml';
 import { logError } from './logger';
 import fs from 'fs';
 import validator from 'express-validator';
+import cors from 'cors';
 
 const app = express();
 const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
@@ -19,6 +20,8 @@ const swaggerDoc = yaml.safeLoad(fs.readFileSync('swagger.yml', 'utf8'));
 if (!fs.existsSync('logs')) {
 	fs.mkdirSync('logs');
 }
+
+app.use(cors());
 
 app.use(logger('dev'));
 app.use(json());

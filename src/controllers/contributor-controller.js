@@ -22,7 +22,7 @@ const addToParent = function (req, res, next) {
 				res.statusMessage = `Factor with id: "${factorId}" does not exist.`;
 				res.end();
 			} else {
-				return contributorRepository.create(factorId, contributor).then(newContributor => {
+				return contributorRepository.addToParent(factorId, contributor).then(newContributor => {
 					res.status(201);
 					res.json(newContributor);
 					res.end();

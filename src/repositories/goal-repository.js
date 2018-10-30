@@ -17,7 +17,21 @@ const getSingle = function (goalId) {
 		},
 		include: [{
 			model: models.Milestone,
-			as: 'milestones'
+			as: 'milestones',
+			include: [{
+				model: models.Factor,
+				as: 'factors',
+				through: {
+					attributes: []
+				},
+				include: [{
+					model: models.Contributor,
+					as: 'contributors',
+					through: {
+						attributes: []
+					},
+				}]
+			}]
 		}]
 	});
 };
